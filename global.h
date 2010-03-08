@@ -1,0 +1,20 @@
+/*
+ * global.h
+ *
+ * Should only contain macros for various parts of the code.
+ *
+ *  Created on: 08/03/2010
+ *      Author: Dennis Hedegaard
+ */
+
+#ifndef GLOBAL_H_
+#define GLOBAL_H_
+
+/*
+ * Defines the maximum length of a line, when passing it from stdin.
+ */
+#define MAX_LINE_LENGTH 1024
+#define PROMPT "> "
+#define BAD_COMMAND(x) fprintf(stderr, "Unknown command \"%s\", try typing \"help\" for help.\n", x);
+
+#endif /* GLOBAL_H_ */
