@@ -1,0 +1,4 @@
+A simple attempt at a shell implemented in the C language.
+For now the commands are:
+ - help: this one.
+ - quit: quits the shell.

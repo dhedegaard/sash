@@ -8,7 +8,21 @@
 #include "command.h"
 
 void help() {
-	printf("TODO\n");
+	FILE *f = fopen("readme", "r");
+	if (f == NULL) {
+		fprintf(stderr, "Unable to find readme.\n");
+	}
+	else {
+		char c, prior;
+		while ((c = fgetc(f)) != EOF) {
+			printf("%c", c);
+			prior = c;
+		}
+		if (prior != '\n');
+			printf("\n");
+
+	}
+	fclose(f);
 }
 
 void quit() {

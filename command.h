@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "global.h"
+
 /**
  * Prints some help, this might include possible commands.
  */
