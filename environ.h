@@ -20,6 +20,7 @@ void setenviron(char **env);
 /**
  * gets a specific environ value. If the value is not found,
  * NULL is returned.
+ * remember to free the pointer, when you're done with it.
  */
 const char *getenvironvalue(const char *key);
 /**
