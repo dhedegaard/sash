@@ -7,53 +7,48 @@
 
 #include "environ.h"
 
-/**
- * Returns the value after equals in a string, for instance
- * if you want the value from a key=value string.
- */
-char *getvalueafterequals(const char *string);
+typedef struct _keyvalue {
+	const char *key;
+	const char *value;
+} keyvalue;
 
-char **_env;
+/**
+ * Returns the value before equals in a string, this is
+ * nice for getting the key from a key=value string.
+ */
+char *getvaluebeforeequals(const char *string);
+
 int _envlen;
+char **_env;
 
 void setenviron(char **env) {
-	int i;
+	_envlen = 0;
 	_env = env;
-	while (_env[i] != NULL)
-		i++;
-	_envlen = i;
-}
-
-const char *getenvironvalue(const char *key) {
-	/* untested */
-	int i;
-	if (key == NULL)
-		return NULL;
-	for (i = 0; i < _envlen; i++)
-		if (startswith(_env[i], key))
-			return getvalueafterequals(_env[i]);
-	return NULL;
+	while (env[_envlen] != NULL)
+		_envlen++;
 }
 
 void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
 	int i;
 	f(stream, "Environmental values:\n");
-	for (i = 0; i < _envlen; i++)
-		f(stream, "%s\n", _env[i]);
+	for (i = 0; i < _envlen; i++) {
+		char *key = getvaluebeforeequals(_env[i]);
+		f(stream, "%s: %s\n", key, getenv(key));
+		free(key);
+		key = NULL;
+	}
 }
 
-char *getvalueafterequals(const char *string) {
-	/* untested */
-	int i, len = strlen(string), pos = -1;
+char *getvaluebeforeequals(const char *string) {
+	int len = strlen(string), pos;
 	char *value;
-	for (i = 0;i < len;i++)
-		if (string[i] == '=') {
-			pos = i + 1;
+	for (pos = 0;pos < len;pos++)
+		if (string[pos] == '=')
 			break;
-		}
-	if (pos == -1)
+	if (pos >= len || pos == 0)
 		return NULL;
-	value = malloc(sizeof(*value) * (len - pos + 1));
-	memcpy(value, string, len - pos + 1);
+	value = malloc(sizeof(*value) * (pos + 1));
+	memcpy(value, string, pos);
+	value[sizeof(*value) * (pos)] = '\0';
 	return value;
 }
