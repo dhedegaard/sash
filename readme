@@ -2,3 +2,5 @@ A simple attempt at a shell implemented in the C language.
 For now the commands are:
  - help: this one.
  - quit: quits the shell.
+ - environ: display environmental variables for the process.
+ - echo: echos the the back to stdout.
