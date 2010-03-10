@@ -18,9 +18,7 @@ void help() {
 			prior = c;
 		}
 		if (prior != '\n')
-			;
-		printf("\n");
-
+			printf("\n");
 	}
 	fclose(f);
 }
