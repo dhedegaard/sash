@@ -15,12 +15,15 @@
 
 /**
  * Sets the env variable, this is used later for "querying".
+ * This function saves the length of the parameter as well
+ * as holding a pointer to it in a file global scope.
  */
 void setenviron(char **env);
 /**
  * Takes all environmental values and puts the through the
  * stream with a function like fprintf.
- * Perhaps a better implementation could be useful here.
+ * If setenviron() hasn't been run yet, this method prints a
+ * warning with the function about needing to do so.
  */
 void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...));
 

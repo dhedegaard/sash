@@ -7,11 +7,6 @@
 
 #include "environ.h"
 
-typedef struct _keyvalue {
-	const char *key;
-	const char *value;
-} keyvalue;
-
 /**
  * Returns the value before equals in a string, this is
  * nice for getting the key from a key=value string.
@@ -30,6 +25,10 @@ void setenviron(char **env) {
 
 void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
 	int i;
+	if (_env == NULL) {
+		f(stream, "environ.c:getenviron(): You forgot to run setenviron()!\n");
+		return;
+	}
 	f(stream, "Environmental values:\n");
 	for (i = 0; i < _envlen; i++) {
 		char *key = getvaluebeforeequals(_env[i]);
