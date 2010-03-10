@@ -17,7 +17,6 @@ int main(int argc, char **argv, char **env) {
 	char input[MAX_LINE_LENGTH];
 	/* setshellpath(argv[0]); */
 	setenviron(env);
-	printf("%s\n", getenv("test"));
 	while (1) {
 		printf("%s", PROMPT);
 		if (fgets(input, MAX_LINE_LENGTH, stdin) == NULL) {
@@ -30,11 +29,13 @@ int main(int argc, char **argv, char **env) {
 }
 
 void setshellpath(char *arg0) {
-	/* TODO fix */
-/*	char *c, *cwd = getcwd(NULL, 0);
-	int len = strlen(cwd) + strlen(arg0) + 1 + 4, i = 4;
-	c = malloc(sizeof(*c) * len);
-	memcpy(c, "PWD=", 4);
-	setenv("test=test");
-	free(c);*/
+	/* TODO fix
+	 * perhaps use getcwd() + argv[0] and parse '..' and '.'.
+	 **/
+	/*	char *c, *cwd = getcwd(NULL, 0);
+	 int len = strlen(cwd) + strlen(arg0) + 1 + 4, i = 4;
+	 c = malloc(sizeof(*c) * len);
+	 memcpy(c, "PWD=", 4);
+	 setenv("test=test");
+	 free(c);*/
 }
