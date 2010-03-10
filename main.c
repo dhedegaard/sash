@@ -31,10 +31,10 @@ int main(int argc, char **argv, char **env) {
 
 void setshellpath(char *arg0) {
 	/* TODO fix */
-	char *c, *cwd = getcwd(NULL, 0);
+/*	char *c, *cwd = getcwd(NULL, 0);
 	int len = strlen(cwd) + strlen(arg0) + 1 + 4, i = 4;
 	c = malloc(sizeof(*c) * len);
 	memcpy(c, "PWD=", 4);
 	setenv("test=test");
-	free(c);
+	free(c);*/
 }
