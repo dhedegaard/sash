@@ -23,7 +23,7 @@ const char *getenvironvalue(const char *key) {
 	return NULL;
 }
 
-void getenviron(FILE* stream, void(*f)(FILE*, const char*, ...)) {
+void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
 	int i;
 	f(stream, "Environmental values:\n");
 	for (i = 0; i < _envlen; i++)

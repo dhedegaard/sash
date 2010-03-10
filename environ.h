@@ -23,9 +23,10 @@ void setenviron(char **env);
  */
 const char *getenvironvalue(const char *key);
 /**
- * gets all specified environ values, each on a line with the
- * key=value format. Each line is called to the function f.
+ * Takes all environmental values and puts the through the
+ * stream with a function like fprintf.
+ * Perhaps a better implementation could be useful here.
  */
-void getenviron(FILE* stream, void(*f)(FILE*, const char*, ...));
+void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...));
 
 #endif /* ENVIRON_H_ */
