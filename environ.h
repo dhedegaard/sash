@@ -9,9 +9,8 @@
 #define ENVIRON_H_
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include "utility.h"
+#include <string.h>
 
 /**
  * Sets the env variable, this is used later for "querying".
