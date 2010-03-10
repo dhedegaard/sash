@@ -15,6 +15,5 @@
  */
 #define MAX_LINE_LENGTH 1024
 #define PROMPT "> "
-#define BAD_COMMAND(x) fprintf(stderr, "Unknown command \"%s\", try typing \"help\" for help.\n", x);
 
 #endif /* GLOBAL_H_ */
