@@ -9,6 +9,7 @@
 
 int main(int argc, char **argv, char **env) {
 	char input[MAX_LINE_LENGTH];
+	setenviron(env);
 	while (1) {
 		printf("%s", PROMPT);
 		if (fgets(input, MAX_LINE_LENGTH, stdin) == NULL) {

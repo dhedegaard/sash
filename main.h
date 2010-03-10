@@ -13,5 +13,6 @@
 #include "global.h"
 #include "utility.h"
 #include "parser.h"
+#include "environ.h"
 
 #endif /* MAIN_H_ */

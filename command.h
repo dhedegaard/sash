@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #include "global.h"
 
@@ -42,5 +44,10 @@ void environ();
  * the function returns immediately.
  */
 void echo(const char *str);
+/**
+ * This happens if all else fails, it simply forks and execs with
+ * the command specified.
+ */
+void cmd_exec(const char *cmd);
 
 #endif /* COMMAND_H_ */

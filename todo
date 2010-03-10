@@ -11,3 +11,17 @@ internal commands:
 
 release 2:
 fork() and exec() all other statements.
+
+release 3:
+batch files as args.
+
+release 4:
+io redirection using < and >, eg:
+app arg1 arg < inputfile > outputfile
+this includes ls, environ, echo and help.
+
+release 5:
+support background execution using ampersand.
+
+release 6:
+change to prompt to show the current dir name.

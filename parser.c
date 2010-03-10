@@ -19,6 +19,7 @@ void parse(const char *input) {
 		free(toecho);
 	}
 	else
-		BAD_COMMAND(trimmed);
+		/* BAD_COMMAND(trimmed);*/
+		cmd_exec(trimmed);
 	free(trimmed);
 }

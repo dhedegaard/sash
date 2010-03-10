@@ -34,5 +34,11 @@ int startswith(const char *string, const char *startwith);
  * unexpected problems.
  */
 char *removefirstword(const char *string);
+/**
+ * This function takes a string, and splits it up whenever a space is
+ * encountered in the string, the external pointer is null terminated.
+ * If the string supplied is NULL, NULL is returned.
+ */
+char **splitonspace(const char *str);
 
 #endif /* UTILITY_H_ */
