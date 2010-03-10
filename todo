@@ -1,0 +1,13 @@
+release 1:
+
+internal commands:
+- cd <dir>
+- ls
+- ls <dir>
+- environ
+- echo <cmd>
+- help
+- quit
+
+release 2:
+fork() and exec() all other statements.

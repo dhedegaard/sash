@@ -7,7 +7,7 @@
 
 #include "main.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv, char **env) {
 	char input[MAX_LINE_LENGTH];
 	while (1) {
 		printf("%s", PROMPT);

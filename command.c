@@ -12,6 +12,25 @@ void help() {
 }
 
 void quit() {
-	printf("Quttting..\n");
+	printf("Qutting..\n");
 	exit(0);
+}
+
+void cd(const char *dir) {
+	/* TODO implement */
+	fprintf(stderr, "TODO");
+}
+
+void ls(const char *dir) {
+	/* TODO implement */
+	fprintf(stderr, "TODO");
+}
+
+void environ() {
+	/* TODO implement */
+	fprintf(stderr, "TODO");
+}
+
+void echo(const char *str) {
+	printf("%s\n", str);
 }

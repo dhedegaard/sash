@@ -13,6 +13,11 @@ void parse(const char *input) {
 		quit();
 	else if(strcmp("help", trimmed) == 0)
 		help();
+	else if(startswith(trimmed, "echo ") == 0) {
+		char *toecho = removefirstword(trimmed);
+		echo(toecho);
+		free(toecho);
+	}
 	else
 		BAD_COMMAND(trimmed);
 	free(trimmed);
