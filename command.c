@@ -39,8 +39,7 @@ void ls(const char *dir) {
 }
 
 void environ() {
-	/* TODO implement */
-	fprintf(stderr, "TODO");
+	getenviron(stdout, fprintf);
 }
 
 void echo(const char *str) {
@@ -56,10 +55,11 @@ void cmd_exec(const char *cmd) {
 		exit(1);
 	}
 	if (child == getpid()) {
+		/* TODO fixfix */
 		/* int res = system(cmd); */
-		int res = execv(cmd, (char *) NULL);
+		/* int res = execv(cmd, (char *) NULL);
 		printf("res: %d\n", res);
-		exit(res);
+		exit(res); */
 	}
 }
 

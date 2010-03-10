@@ -15,4 +15,17 @@ void setenviron(char **env) {
 	_env = env;
 	while (_env[i] != NULL)
 		i++;
+	_envlen = i;
+}
+
+const char *getenvironvalue(const char *key) {
+	/* TODO implement */
+	return NULL;
+}
+
+void getenviron(FILE* stream, void(*f)(FILE*, const char*, ...)) {
+	int i;
+	f(stream, "Environmental values:\n");
+	for (i = 0; i < _envlen; i++)
+		f(stream, "%s\n", _env[i]);
 }

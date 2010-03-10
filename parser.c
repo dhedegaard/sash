@@ -18,6 +18,8 @@ void parse(const char *input) {
 		echo(toecho);
 		free(toecho);
 	}
+	else if(strcmp("environ", trimmed) == 0)
+		environ();
 	else
 		cmd_exec(trimmed);
 	free(trimmed);

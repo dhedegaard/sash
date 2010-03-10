@@ -14,6 +14,7 @@
 #include <sys/types.h>
 
 #include "global.h"
+#include "environ.h"
 
 /**
  * Prints some help, this might include possible commands.
