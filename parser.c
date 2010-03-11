@@ -19,13 +19,12 @@ void parse(const char *input) {
 		free(toecho);
 	} else if (strcmp("environ", trimmed) == 0)
 		cmd_environ();
-	else if (strcmp("ls", trimmed) == 0) {
+	else if (startswith(trimmed, "ls") == 0) {
 		char *dir = removefirstword(trimmed);
 		cmd_ls(dir);
 		if (dir != NULL)
 			free(dir);
-	}
-	else if (strcmp("cd", trimmed) == 0)
+	} else if (strcmp("cd", trimmed) == 0)
 		cmd_cd(trimmed);
 	else
 		cmd_exec(trimmed);
