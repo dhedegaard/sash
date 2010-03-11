@@ -8,6 +8,8 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include <string.h>
+
 #include "global.h"
 #include "utility.h"
 #include "command.h"

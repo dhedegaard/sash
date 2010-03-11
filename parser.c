@@ -8,18 +8,17 @@
 #include "parser.h"
 
 void parse(const char *input) {
-	char *trimmed = trim(input);
+	char *trimmed;
+	trimmed = trim(input);
 	if (strcmp("quit", trimmed) == 0)
 		cmd_quit();
 	else if (strcmp("help", trimmed) == 0)
 		cmd_help();
-	else if (startswith(trimmed, "echo ") == 0) {
-		char *toecho = removefirstword(trimmed);
-		cmd_echo(toecho);
-		free(toecho);
+	else if (startswith(trimmed, "echo") == 0) {
+		cmd_echo(removefirstword(trimmed));
 	} else if (strcmp("environ", trimmed) == 0)
 		cmd_environ();
-	else if (startswith(trimmed, "ls") == 0) {
+	else if (startswith(trimmed, "ls") == 0 || startswith(trimmed, "dir") == 0) {
 		char *dir = removefirstword(trimmed);
 		cmd_ls(dir);
 		if (dir != NULL)

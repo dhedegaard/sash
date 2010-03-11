@@ -25,12 +25,12 @@ char* trim(const char *string) {
 	right = strlen(string) - 1;
 	for (i = 0; i <= right; i++)
 		if (!checkvalid(string[i]))
-			left = i + 1;
+			left = i;
 		else
 			break;
 	for (i = right; i >= left; i--)
 		if (!checkvalid(string[i]))
-			right = i - 1;
+			right = i;
 		else
 			break;
 	if (left >= right)
@@ -43,37 +43,24 @@ int startswith(const char *string, const char *startwith) {
 	int stringlen, startwithlen, i;
 	if ((stringlen = strlen(string)) < (startwithlen = strlen(startwith)))
 		return 1;
-	for (i = 0;i < startwithlen;i++)
+	for (i = 0; i < startwithlen; i++)
 		if (string[i] != startwith[i])
 			return 1;
 	return 0;
 }
 
 char *removefirstword(const char *string) {
-	int pos = -1, len, i;
-	char *newstring;
-	if (string == NULL)
+	char *pos;
+	if ((pos = strchr(string, ' ')) != NULL)
+		return pos + 1;
+	else
 		return NULL;
-	if ((len = strlen(string)) == 0)
-		return NULL;
-	for (i = 0;i < len;i++)
-		if (string[i] == ' ') {
-			if ((pos = i + 1) > len)
-				return NULL;
-			break;
-		}
-	if (pos == -1)
-		return NULL;
-	newstring = malloc(sizeof(*newstring) * len - pos + 1);
-	memcpy(newstring, string + pos, len - pos);
-	return newstring;
 }
 
 char* makestring(int left, int right, const char *string) {
-	int size = right - left + 1;
-	char *newstr = malloc(sizeof(newstr) * size + 1);
-	memcpy(newstr, string + left, size);
-	newstr[size + 1] = '\0';
+	char *newstr = malloc(sizeof(newstr) * (right - left));
+	memcpy(newstr, string + left, right - left);
+	newstr[right - left] = '\0';
 	return newstr;
 }
 
