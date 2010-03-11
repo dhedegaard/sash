@@ -39,11 +39,11 @@ void setshellpath() {
 	}
 	newshell = malloc(sizeof(*newshell) * 255);
 	if (readlink(pid, newshell, 254) == -1) {
-		fprintf(stderr, "Unable to read executable path from: %s\n", pid);
-		exit(1);
+		fprintf(stderr, "warning: Unable to read executable path from: %s\n",
+				pid);
 	}
 	if (setenv("SHELL", newshell, 1) == -1) {
-		fprintf(stderr, "Unable to set the shell to: %s\n", newshell);
+		fprintf(stderr, "warning: Unable to set the shell to: %s\n", newshell);
 	}
 	free(pid);
 	free(newshell);

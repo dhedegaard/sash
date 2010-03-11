@@ -10,9 +10,8 @@
 void cmd_help() {
 	char *helpfile = malloc(sizeof(*helpfile) * MAX_LINE_LENGTH);
 	FILE *f;
-	if (strcpy(helpfile, getstartwd()) == NULL || strcat(helpfile, "/") == NULL
-			|| strcat(helpfile, "readme")) {
-		fprintf(stderr, "command.c:cmd_help(): strcpy error.\n");
+	if (sprintf(helpfile, "%s/readme", getstartwd()) < 0) {
+		fprintf(stderr, "command.c:sprintf(): error writing to buffer.\n");
 		exit(1);
 	}
 	if ((f = fopen(helpfile, "r")) == NULL) {
@@ -36,7 +35,7 @@ void cmd_quit() {
 }
 
 void cmd_cd(const char *dir) {
-	if (strcmp(dir, "~") == 0) {
+	if (dir == NULL || strcmp(dir, "~") == 0) {
 		if (chdir(getenv("HOME")) != 0)
 			fprintf(stderr, "Unable to change to homedir.\n");
 	} else if (chdir(dir) != 0)
