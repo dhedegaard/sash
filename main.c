@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **env) {
 	while (1) {
 		printf("%s", PROMPT);
 		if (fgets(input, MAX_LINE_LENGTH, stdin) == NULL) {
-			fprintf(stderr, "There was an error reading from stdin.\n");
+			fprintf(stderr, "EOF caught, quitting.\n");
 			exit(1);
 		}
 		parse(input);
