@@ -11,12 +11,12 @@
  * Attemps to set the SHELL environmental variable, using
  * getcwd() and setenv().
  */
-void setshellpath(char *arg0);
+void setshellpath();
 
 int main(int argc, char **argv, char **env) {
 	char input[MAX_LINE_LENGTH];
 	printf("sash shell revision: %d\n", REVISION);
-	setshellpath(argv[0]);
+	setshellpath();
 	setenviron(env);
 	while (1) {
 		printf("%s", PROMPT);
@@ -29,8 +29,7 @@ int main(int argc, char **argv, char **env) {
 	return 0;
 }
 
-void setshellpath(char *arg0) {
-	/* TODO fix */
+void setshellpath() {
 	char *pid, *newshell;
 	pid = malloc(sizeof(*pid) * 17);
 	if (snprintf(pid, 16, "/proc/%d/exe", getpid()) < 0) {
