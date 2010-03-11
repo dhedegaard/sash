@@ -47,8 +47,7 @@ void echo(const char *str) {
 }
 
 void cmd_exec(const char *cmd) {
-	pid_t child, parent;
-	parent = getpid();
+	pid_t child;
 	child = fork();
 	if (child < 0) { /* if unable to fork child. */
 		fprintf(stderr, "command.c:cmd_exec(): Failed to fork process.\n");
