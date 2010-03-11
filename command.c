@@ -30,12 +30,12 @@ void quit() {
 
 void cd(const char *dir) {
 	/* TODO implement */
-	fprintf(stderr, "TODO");
+	fprintf(stderr, "TODO\n");
 }
 
 void ls(const char *dir) {
 	/* TODO implement */
-	fprintf(stderr, "TODO");
+	fprintf(stderr, "TODO\n");
 }
 
 void environ() {
@@ -50,15 +50,13 @@ void cmd_exec(const char *cmd) {
 	pid_t child, parent;
 	parent = getpid();
 	child = fork();
-	if (child < 0) {
+	if (child < 0) { /* if unable to fork child. */
 		fprintf(stderr, "command.c:cmd_exec(): Failed to fork process.\n");
 		exit(1);
-	}
-	if (child == getpid()) {
-		/* TODO fixfix */
-		int res = system(cmd);
-		/* int res = execv(cmd, (char *) NULL); */
-		exit(res);
+	} else if (child == 0) { /* if is child. */
+		int result = system(cmd);
+		printf("child (%d) returned: %d\n", getpid(), result);
+		exit(result);
 	}
 }
 

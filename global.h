@@ -15,5 +15,6 @@
  */
 #define MAX_LINE_LENGTH 1024
 #define PROMPT "> "
+#define REVISION 0
 
 #endif /* GLOBAL_H_ */

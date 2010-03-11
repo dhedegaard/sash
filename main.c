@@ -15,6 +15,7 @@ void setshellpath(char *arg0);
 
 int main(int argc, char **argv, char **env) {
 	char input[MAX_LINE_LENGTH];
+	printf("sash shell revision: %d\n", REVISION);
 	/* setshellpath(argv[0]); */
 	setenviron(env);
 	while (1) {
