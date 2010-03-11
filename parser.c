@@ -14,16 +14,13 @@ void parse(const char *input) {
 		cmd_quit();
 	else if (strcmp("help", trimmed) == 0)
 		cmd_help();
-	else if (startswith(trimmed, "echo") == 0) {
+	else if (startswith(trimmed, "echo ") == 0) {
 		cmd_echo(removefirstword(trimmed));
 	} else if (strcmp("environ", trimmed) == 0)
 		cmd_environ();
-	else if (startswith(trimmed, "ls") == 0 || startswith(trimmed, "dir") == 0) {
-		char *dir = removefirstword(trimmed);
-		cmd_ls(dir);
-		if (dir != NULL)
-			free(dir);
-	} else if (strcmp("cd", trimmed) == 0)
+	else if (startswith(trimmed, "ls ") == 0 || startswith(trimmed, "dir") == 0)
+		cmd_ls(removefirstword(trimmed));
+	else if (strcmp("cd", trimmed) == 0)
 		cmd_cd(trimmed);
 	else
 		cmd_exec(trimmed);

@@ -3,4 +3,7 @@ For now the commands are:
  - help: this one.
  - quit: quits the shell.
  - environ: display environmental variables for the process.
- - echo: echos the the back to stdout.
+ - echo <text>: echos the text back to stdout.
+ - ls [dir]: lists files in a directory, if dir is not specified
+             the current directory is listed.
+ - dir [dir]: same as ls.

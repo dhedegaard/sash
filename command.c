@@ -42,7 +42,10 @@ void cmd_environ() {
 }
 
 void cmd_echo(const char *str) {
-	printf("%s\n", str);
+	if (str == NULL)
+		fprintf(stderr, "echo: not arguments supplied.\n");
+	else
+		printf("%s\n", str);
 }
 
 void cmd_exec(const char *cmd) {
