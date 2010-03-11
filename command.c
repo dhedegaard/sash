@@ -56,10 +56,9 @@ void cmd_exec(const char *cmd) {
 	}
 	if (child == getpid()) {
 		/* TODO fixfix */
-		/* int res = system(cmd); */
-		/* int res = execv(cmd, (char *) NULL);
-		printf("res: %d\n", res);
-		exit(res); */
+		int res = system(cmd);
+		/* int res = execv(cmd, (char *) NULL); */
+		exit(res);
 	}
 }
 

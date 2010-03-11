@@ -69,13 +69,6 @@ char *removefirstword(const char *string) {
 	return newstring;
 }
 
-char **splitonspace(const char *str) {
-	if (str == NULL)
-		return NULL;
-	/* TODO implement */
-	return NULL;
-}
-
 char* makestring(int left, int right, const char *string) {
 	int size = right - left + 1;
 	char *newstr = malloc(sizeof(newstr) * size + 1);
