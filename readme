@@ -2,6 +2,7 @@ A simple attempt at a shell implemented in the C language.
 For now the commands are:
  - help: this one.
  - quit: quits the shell.
+ - exit: same as above.
  - environ: display environmental variables for the process.
  - echo <text>: echos the text back to stdout.
  - ls [dir]: lists files in a directory, if dir is not specified

@@ -10,7 +10,7 @@
 void parse(const char *input) {
 	char *trimmed;
 	trimmed = trim(input);
-	if (strcmp("quit", trimmed) == 0)
+	if (strcmp("quit", trimmed) == 0 || strcmp("exit", trimmed) == 0)
 		cmd_quit();
 	else if (strcmp("help", trimmed) == 0)
 		cmd_help();
