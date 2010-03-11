@@ -15,36 +15,37 @@
 
 #include "global.h"
 #include "environ.h"
+#include "ls.h"
 
 /**
  * Prints some help, this might include possible commands.
  */
-void help();
+void cmd_help();
 /**
  * Quits the shell.
  */
-void quit();
+void cmd_quit();
 /**
  * Attempts to change directory, to the one specified. If
  * the directory does not exist, or is restricted access,
  * the error is handled internally.
  * If the change is succesfully, the PWD variable is changed.
  */
-void cd(const char *dir);
+void cmd_cd(const char *dir);
 /**
  * Attempts to list the contains in a directory, if no argument
  * is supplied (NULL), the current directory is listed.
  */
-void ls(const char *dir);
+void cmd_ls(const char *dir);
 /**
  * Lists all the environmental variables available on the system.
  */
-void environ();
+void cmd_environ();
 /**
  * Does a simple echo of the text specified, if the text is NULL,
  * the function returns immediately.
  */
-void echo(const char *str);
+void cmd_echo(const char *str);
 /**
  * This happens if all else fails, it simply forks and execs with
  * the command specified.

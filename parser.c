@@ -10,19 +10,23 @@
 void parse(const char *input) {
 	char *trimmed = trim(input);
 	if (strcmp("quit", trimmed) == 0)
-		quit();
+		cmd_quit();
 	else if (strcmp("help", trimmed) == 0)
-		help();
+		cmd_help();
 	else if (startswith(trimmed, "echo ") == 0) {
 		char *toecho = removefirstword(trimmed);
-		echo(toecho);
+		cmd_echo(toecho);
 		free(toecho);
 	} else if (strcmp("environ", trimmed) == 0)
-		environ();
-	else if (strcmp("ls", trimmed) == 0)
-		ls(trimmed);
+		cmd_environ();
+	else if (strcmp("ls", trimmed) == 0) {
+		char *dir = removefirstword(trimmed);
+		cmd_ls(dir);
+		if (dir != NULL)
+			free(dir);
+	}
 	else if (strcmp("cd", trimmed) == 0)
-		cd(trimmed);
+		cmd_cd(trimmed);
 	else
 		cmd_exec(trimmed);
 	free(trimmed);

@@ -7,7 +7,7 @@
 
 #include "command.h"
 
-void help() {
+void cmd_help() {
 	FILE *f = fopen("readme", "r");
 	if (f == NULL) {
 		fprintf(stderr, "Unable to find readme.\n");
@@ -23,26 +23,27 @@ void help() {
 	fclose(f);
 }
 
-void quit() {
+void cmd_quit() {
 	printf("Qutting..\n");
 	exit(0);
 }
 
-void cd(const char *dir) {
+void cmd_cd(const char *dir) {
 	/* TODO implement */
 	fprintf(stderr, "TODO\n");
 }
 
-void ls(const char *dir) {
+void cmd_ls(const char *dir) {
 	/* TODO implement */
 	fprintf(stderr, "TODO\n");
+	ls_ls(dir);
 }
 
-void environ() {
+void cmd_environ() {
 	getenviron(stdout, fprintf);
 }
 
-void echo(const char *str) {
+void cmd_echo(const char *str) {
 	printf("%s\n", str);
 }
 
