@@ -34,8 +34,6 @@ void cmd_cd(const char *dir) {
 }
 
 void cmd_ls(const char *dir) {
-	/* TODO implement */
-	fprintf(stderr, "TODO\n");
 	ls_ls(dir);
 }
 
