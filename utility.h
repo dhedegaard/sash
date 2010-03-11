@@ -39,6 +39,5 @@ char *removefirstword(const char *string);
  * encountered in the string, the external pointer is null terminated.
  * If the string supplied is NULL, NULL is returned.
  */
-char **splitonspace(const char *str);
 
 #endif /* UTILITY_H_ */
