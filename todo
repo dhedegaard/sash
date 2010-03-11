@@ -1,6 +1,6 @@
 release 1:
-
 internal commands:
+- cd
 - cd <dir>
 - ls
 - ls <dir>
