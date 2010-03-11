@@ -15,12 +15,14 @@ char *getvaluebeforeequals(const char *string);
 
 int _envlen;
 char **_env;
+char *_startwd;
 
 void setenviron(char **env) {
 	_envlen = 0;
 	_env = env;
 	while (env[_envlen] != NULL)
 		_envlen++;
+	_startwd = getcwd(NULL, 0);
 }
 
 void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
@@ -41,7 +43,7 @@ void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
 char *getvaluebeforeequals(const char *string) {
 	int len = strlen(string), pos;
 	char *value;
-	for (pos = 0;pos < len;pos++)
+	for (pos = 0; pos < len; pos++)
 		if (string[pos] == '=')
 			break;
 	if (pos >= len || pos == 0)
@@ -50,4 +52,8 @@ char *getvaluebeforeequals(const char *string) {
 	memcpy(value, string, pos);
 	value[sizeof(*value) * (pos)] = '\0';
 	return value;
+}
+
+const char *getstartwd() {
+	return _startwd;
 }

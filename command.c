@@ -8,8 +8,14 @@
 #include "command.h"
 
 void cmd_help() {
-	FILE *f = fopen("readme", "r");
-	if (f == NULL) {
+	char *helpfile = malloc(sizeof(*helpfile) * MAX_LINE_LENGTH);
+	FILE *f;
+	if (strcpy(helpfile, getstartwd()) == NULL || strcat(helpfile, "/") == NULL
+			|| strcat(helpfile, "readme")) {
+		fprintf(stderr, "command.c:cmd_help(): strcpy error.\n");
+		exit(1);
+	}
+	if ((f = fopen(helpfile, "r")) == NULL) {
 		fprintf(stderr, "Unable to find readme.\n");
 	} else {
 		char c, prior;
@@ -21,6 +27,7 @@ void cmd_help() {
 			printf("\n");
 	}
 	fclose(f);
+	free(helpfile);
 }
 
 void cmd_quit() {
@@ -29,8 +36,11 @@ void cmd_quit() {
 }
 
 void cmd_cd(const char *dir) {
-	/* TODO implement */
-	fprintf(stderr, "TODO\n");
+	if (strcmp(dir, "~") == 0) {
+		if (chdir(getenv("HOME")) != 0)
+			fprintf(stderr, "Unable to change to homedir.\n");
+	} else if (chdir(dir) != 0)
+		fprintf(stderr, "Unable to change directory to: %s\n", dir);
 }
 
 void cmd_ls(const char *dir) {

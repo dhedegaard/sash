@@ -37,7 +37,6 @@ void setshellpath() {
 				"Unable to get pid, in less than 7 (16 for the rest) chars.\n");
 		exit(1);
 	}
-	printf("pid: %s\n", pid);
 	newshell = malloc(sizeof(*newshell) * 255);
 	if (readlink(pid, newshell, 254) == -1) {
 		fprintf(stderr, "Unable to read executable path from: %s\n", pid);

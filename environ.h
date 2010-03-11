@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+#include "global.h"
 
 /**
  * Sets the env variable, this is used later for "querying".
@@ -25,5 +28,12 @@ void setenviron(char **env);
  * warning with the function about needing to do so.
  */
 void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...));
+/**
+ * Takes the working dir as stored from the time where setenviron()
+ * was run, this is nice for keeping the initial workdir in order.
+ * Used for the "help" command, in order to find the readme after using
+ * chdir.
+ */
+const char *getstartwd();
 
 #endif /* ENVIRON_H_ */

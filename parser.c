@@ -18,10 +18,10 @@ void parse(const char *input) {
 		cmd_echo(removefirstword(trimmed));
 	} else if (strcmp("environ", trimmed) == 0)
 		cmd_environ();
-	else if (startswith(trimmed, "ls ") == 0 || startswith(trimmed, "dir") == 0)
+	else if (startswith(trimmed, "ls") == 0 || startswith(trimmed, "dir") == 0)
 		cmd_ls(removefirstword(trimmed));
-	else if (strcmp("cd", trimmed) == 0)
-		cmd_cd(trimmed);
+	else if (startswith(trimmed, "cd ") == 0)
+		cmd_cd(removefirstword(trimmed));
 	else
 		cmd_exec(trimmed);
 	free(trimmed);
