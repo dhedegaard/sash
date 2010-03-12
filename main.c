@@ -33,7 +33,7 @@ void setshellpath() {
 	char *pid, *newshell;
 	size_t size = 17, maxpath = MAX_LINE_LENGTH;
 	pid = malloc(sizeof(*pid) * size + 1);
-	if (snprintf(pid, size, "/proc//exe") <= 0) {
+	if (snprintf(pid, size, "/proc/%d/exe", getpid()) <= 0) {
 		fprintf(stderr, "Unable to get pid, in less than %lu chars.\n", size);
 		exit(1);
 	}
