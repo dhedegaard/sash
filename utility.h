@@ -8,8 +8,11 @@
 #ifndef UTILITY_H_
 #define UTILITY_H_
 
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#include "global.h"
 
 /**
  * Does a simple trim of a string, if the string is NULL or
@@ -33,11 +36,12 @@ int startswith(const char *string, const char *startwith);
  * This function does not handle trimming, this may or may not cause
  * unexpected problems.
  */
-char *removefirstword(const char *string);
+char* removefirstword(const char *string);
 /**
- * This function takes a string, and splits it up whenever a space is
- * encountered in the string, the external pointer is null terminated.
- * If the string supplied is NULL, NULL is returned.
+ * Does a simple parsing of a relative path, changing different weird
+ * symbols input read path data.
+ * Remember to free the result eventually, to avoid leaks.
  */
+char* getrelativepath(const char *path);
 
 #endif /* UTILITY_H_ */

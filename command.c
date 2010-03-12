@@ -35,15 +35,21 @@ void cmd_quit() {
 }
 
 void cmd_cd(const char *dir) {
-	if (dir == NULL || strcmp(dir, "~") == 0) {
-		if (chdir(getenv("HOME")) != 0)
-			fprintf(stderr, "Unable to change to homedir.\n");
-	} else if (chdir(dir) != 0)
-		fprintf(stderr, "Unable to change directory to: %s\n", dir);
+	char *path = (char*) getrelativepath(dir);
+	if (chdir(path) != 0)
+		fprintf(stderr, "unable to change current dir to: %s\n", path);
+	free(path);
+	/* if (dir == NULL || strcmp(dir, "~") == 0) {
+	 if (chdir(getenv("HOME")) != 0)
+	 fprintf(stderr, "Unable to change to homedir.\n");
+	 } else if (chdir(dir) != 0)
+	 fprintf(stderr, "Unable to change directory to: %s\n", dir); */
 }
 
 void cmd_ls(const char *dir) {
-	ls_ls(dir);
+	char *path = (char *) getrelativepath(dir);
+	ls_ls(path);
+	free(path);
 }
 
 void cmd_environ() {

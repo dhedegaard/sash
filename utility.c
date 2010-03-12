@@ -49,12 +49,26 @@ int startswith(const char *string, const char *startwith) {
 	return 0;
 }
 
-char *removefirstword(const char *string) {
+char* removefirstword(const char *string) {
 	char *pos;
 	if ((pos = strchr(string, ' ')) != NULL)
 		return pos + 1;
 	else
 		return NULL;
+}
+
+char* getrelativepath(const char *dir) {
+	char *newpath;
+	int len;
+	if (dir == NULL)
+		return NULL;
+	len = strlen(dir);
+	newpath = malloc(sizeof(newpath) * MAX_LINE_LENGTH);
+	if (len > 0 && dir[0] == '~')
+		sprintf(newpath, "%s%s", getenv("HOME"),  dir + 1);
+	else
+		sprintf(newpath, "%s", dir);
+	return newpath;
 }
 
 char* makestring(int left, int right, const char *string) {
