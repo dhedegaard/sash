@@ -35,7 +35,7 @@ void cmd_quit() {
 }
 
 void cmd_cd(const char *dir) {
-	char *path = (char*) getrelativepath(dir);
+	char *path = getrelativepath(dir);
 	if (chdir(path) != 0)
 		fprintf(stderr, "unable to change current dir to: %s\n", path);
 	free(path);
@@ -47,7 +47,7 @@ void cmd_cd(const char *dir) {
 }
 
 void cmd_ls(const char *dir) {
-	char *path = (char *) getrelativepath(dir);
+	char *path = getrelativepath(dir);
 	ls_ls(path);
 	free(path);
 }

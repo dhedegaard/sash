@@ -31,19 +31,23 @@ int main(int argc, char **argv, char **env) {
 
 void setshellpath() {
 	char *pid, *newshell;
-	pid = malloc(sizeof(*pid) * 17);
-	if (snprintf(pid, 16, "/proc/%d/exe", getpid()) < 0) {
-		fprintf(stderr,
-				"Unable to get pid, in less than 7 (16 for the rest) chars.\n");
+	size_t size = 17, maxpath = MAX_LINE_LENGTH;
+	pid = malloc(sizeof(*pid) * size + 1);
+	if (snprintf(pid, size, "/proc//exe") <= 0) {
+		fprintf(stderr, "Unable to get pid, in less than %lu chars.\n", size);
 		exit(1);
 	}
-	newshell = malloc(sizeof(*newshell) * 255);
-	if (readlink(pid, newshell, 254) == -1) {
+	newshell = malloc(sizeof(*newshell) * maxpath + 1);
+	if (readlink(pid, newshell, maxpath) == -1) {
 		fprintf(stderr, "warning: Unable to read executable path from: %s\n",
 				pid);
 	}
 	if (setenv("SHELL", newshell, 1) == -1) {
-		fprintf(stderr, "warning: Unable to set the shell to: %s\n", newshell);
+		if (errno == ENOMEM)
+			fprintf(stderr, "warning: no memory available for putenv().\n");
+		else
+			fprintf(stderr,
+					"warning: Unable to set the shell for unknown reasons.\n");
 	}
 	free(pid);
 	free(newshell);

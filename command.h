@@ -14,6 +14,7 @@
 #include <sys/types.h>
 
 #include "global.h"
+#include "utility.h"
 #include "environ.h"
 #include "ls.h"
 
