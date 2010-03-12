@@ -8,8 +8,9 @@
 #include "parser.h"
 
 void parse(const char *input) {
-	char *trimmed;
-	trimmed = trim(input);
+	char *trimmed = trim(input);
+	if (trimmed == NULL)
+		return;
 	if (strcmp("quit", trimmed) == 0 || strcmp("exit", trimmed) == 0)
 		cmd_quit();
 	else if (strcmp("help", trimmed) == 0)
