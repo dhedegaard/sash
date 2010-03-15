@@ -34,7 +34,9 @@ void setshellpath() {
 	size_t size = 17, maxpath = MAX_LINE_LENGTH;
 	pid = malloc(sizeof(*pid) * size + 1);
 	if (snprintf(pid, size, "/proc/%d/exe", getpid()) <= 0) {
-		fprintf(stderr, "Unable to get pid, in less than %lu chars.\n", size);
+		fprintf(stderr,
+				"error: unable to get pid, in less than %" PRIdPTR " chars.\n",
+				size);
 		exit(1);
 	}
 	newshell = malloc(sizeof(*newshell) * maxpath + 1);

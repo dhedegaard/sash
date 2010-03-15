@@ -13,6 +13,7 @@
 #include <string.h>
 #include <unistd.h> /* readlink */
 #include <errno.h>
+#include <inttypes.h>
 
 #include "global.h"
 #include "utility.h"
