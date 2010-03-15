@@ -13,21 +13,21 @@
  */
 static int compare_chars(const void *a, const void *b);
 
-typedef struct _node {
-	struct _node *next;
+struct node {
+	struct node *next;
 	char *name;
-} node;
+};
 
 void ls_ls(const char *_dir) {
 	DIR *d;
 	struct dirent *dir;
 	int size = 0;
-	node *top = NULL;
+	struct node *top = NULL;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
 		int pos;
 		char **arr;
 		while ((dir = readdir(d)) != NULL) {
-			node *newnode = malloc(sizeof(*newnode));
+			struct node *newnode = malloc(sizeof(*newnode));
 			newnode->name = dir->d_name;
 			newnode->next = top;
 			top = newnode;
@@ -37,7 +37,7 @@ void ls_ls(const char *_dir) {
 		pos = 0;
 		arr = malloc(sizeof(*arr) * size);
 		while (top != NULL) {
-			node *oldtop = top;
+			struct node *oldtop = top;
 			arr[pos++] = top->name;
 			top = top->next;
 			free(oldtop);
