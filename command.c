@@ -35,16 +35,7 @@ void cmd_quit() {
 }
 
 void cmd_cd(const char *dir) {
-	if (dir == NULL) {
-		if (chdir(getenv("HOME")) != 0)
-			fprintf(stderr, "unable to change to homedir.\n");
-		return;
-	} else {
-		char *path = getrelativepath(dir);
-		if (chdir(path) != 0)
-			fprintf(stderr, "unable to change current dir to: %s\n", path);
-		free(path);
-	}
+	cd_cd(dir);
 }
 
 void cmd_ls(const char *dir) {
