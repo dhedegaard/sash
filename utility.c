@@ -11,11 +11,11 @@
  * Allocates and makes a new string based on the input from trim.
  * It always allocates 1 extra byte, for terminating the string (\0).
  */
-char* makestring(int left, int right, const char *string);
+static char* makestring(int left, int right, const char *string);
 /**
  * Checks to see if a char is "valid", meaning it shouldn't get trimmed.
  */
-int checkvalid(char c);
+static int checkvalid(char c);
 
 char* trim(const char *string) {
 	int left, right = 0, i;
@@ -65,19 +65,19 @@ char* getrelativepath(const char *dir) {
 	len = strlen(dir);
 	newpath = malloc(sizeof(newpath) * MAX_LINE_LENGTH);
 	if (len > 0 && dir[0] == '~')
-		sprintf(newpath, "%s%s", getenv("HOME"),  dir + 1);
+		sprintf(newpath, "%s%s", getenv("HOME"), dir + 1);
 	else
 		sprintf(newpath, "%s", dir);
 	return newpath;
 }
 
-char* makestring(int left, int right, const char *string) {
+static char* makestring(int left, int right, const char *string) {
 	char *newstr = malloc(sizeof(newstr) * (right - left));
 	memcpy(newstr, string + left, right - left);
 	newstr[right - left] = '\0';
 	return newstr;
 }
 
-int checkvalid(char c) {
+static int checkvalid(char c) {
 	return (c != ' ' && c != '\t' && c != '\n') ? 1 : 0;
 }

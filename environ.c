@@ -11,11 +11,11 @@
  * Returns the value before equals in a string, this is
  * nice for getting the key from a key=value string.
  */
-char *getvaluebeforeequals(const char *string);
+static char *getvaluebeforeequals(const char *string);
 
-int _envlen;
-char **_env;
-char *_startwd;
+static int _envlen;
+static char **_env;
+static char *_startwd;
 
 void setenviron(char **env) {
 	_envlen = 0;
@@ -40,7 +40,7 @@ void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
 	}
 }
 
-char *getvaluebeforeequals(const char *string) {
+static char *getvaluebeforeequals(const char *string) {
 	int len = strlen(string), pos;
 	char *value;
 	for (pos = 0; pos < len; pos++)
