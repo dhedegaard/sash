@@ -13,24 +13,14 @@
  */
 static int compare_chars(const void *a, const void *b);
 
-/* struct node {
- struct node *next;
- char *name;
- }; */
-
 void ls_ls(const char *_dir) {
 	DIR *d;
 	struct dirent *dir;
 	int size = 0;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
 		stack_t stack;
-		int pos;
+		int pos = 0;
 		const char **arr, *e;
-		/** TODO find a better sollution.
-		 * if the top node is not set to NULL, segfaults occur
-		 * when you try to push after the stack is empty, since the
-		 * memory isn't sanitized.
-		 */
 		stack.top = NULL;
 		/* push all the directory names onto a stack. */
 		while ((dir = readdir(d)) != NULL) {
@@ -38,18 +28,13 @@ void ls_ls(const char *_dir) {
 			size++;
 		}
 		closedir(d);
-		pos = 0;
-		/* goes on the heap, due to ansi c. */
 		arr = malloc(sizeof(*arr) * size);
 		/* pop the stack, until it's empty. */
 		while ((e = pop(&stack)) != NULL)
 			arr[pos++] = e;
-		/* sort the array. */
 		qsort(arr, size, sizeof(*arr), compare_chars);
-		/* output is. */
 		for (pos = 0; pos < size; pos++)
 			printf("%s\n", arr[pos]);
-		/* free the array on the heap. */
 		free(arr);
 	} else {
 		const char *errdir = _dir == NULL ? "." : _dir;
@@ -59,8 +44,7 @@ void ls_ls(const char *_dir) {
 					errdir);
 			break;
 		case ELOOP:
-			fprintf(stderr, "There's a symlink loop in the path: %s\n",
-					errdir);
+			fprintf(stderr, "There's a symlink loop in the path: %s\n", errdir);
 			break;
 		case ENAMETOOLONG:
 			fprintf(
