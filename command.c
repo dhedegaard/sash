@@ -64,7 +64,7 @@ void cmd_exec(const char *cmd) {
 	} else if (child == 0) { /* if is child. */
 		int result = system(cmd);
 		printf("child (%d) returned: %d\n", getpid(), result);
-		exit(result);
+		_exit(result);
 	}
 }
 
