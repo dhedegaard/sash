@@ -11,7 +11,7 @@
  * Attemps to set the SHELL environmental variable, using
  * getcwd() and setenv().
  */
-void setshellpath();
+static void setshellpath();
 
 int main(int argc, char **argv, char **env) {
 	char input[MAX_LINE_LENGTH];
@@ -29,23 +29,51 @@ int main(int argc, char **argv, char **env) {
 	return 0;
 }
 
-void setshellpath() {
+static void setshellpath() {
 	char *pid, *newshell;
-	size_t size = 17, maxpath = MAX_LINE_LENGTH;
-	pid = malloc(sizeof(*pid) * size + 1);
-	if (snprintf(pid, size, "/proc/%d/exe", getpid()) <= 0) {
-		fprintf(stderr,
-				"error: unable to get pid, in less than %" PRIdPTR " chars.\n",
-				size);
+	pid = malloc(sizeof(*pid) * (PATH_MAX + 1));
+	if (snprintf(pid, PATH_MAX, "/proc/%d/exe", getpid()) <= 0) {
+		fprintf(stderr, "error: unable to get pid, in less than %d chars.\n",
+				PATH_MAX);
 		exit(1);
 	}
-	newshell = malloc(sizeof(*newshell) * maxpath + 1);
-	if (readlink(pid, newshell, maxpath) == -1) {
-		fprintf(stderr, "warning: Unable to read executable path from: %s\n",
-				pid);
+	newshell = malloc(sizeof(*newshell) * (PATH_MAX + 1));
+	if (readlink(pid, newshell, PATH_MAX) == -1) {
+		const char *err;
+		switch (errno) {
+		case EACCES:
+			err = "search or read permissions denied for path";
+			break;
+		case EINVAL:
+			err = "the path name is not a symlink";
+			break;
+		case EIO:
+			err = "an IO error occured for";
+			break;
+		case ELOOP:
+			err = "there's a loop in the symlink chain for";
+			break;
+		case ENAMETOOLONG:
+			err = "the path is too long";
+			break;
+		case ENOENT:
+			err = "the link does not exist";
+			break;
+		case ENOTDIR:
+			err = "a part of the path is not a directory";
+			break;
+		default:
+			err = "unknown error, unable to access";
+			break;
+		}
+		fprintf(stderr, "warning: %s: %s\n", err, pid);
 	}
 	if (setenv("SHELL", newshell, 1) == -1) {
-		if (errno == ENOMEM)
+		if (errno == EINVAL)
+			fprintf(stderr,
+					"warning: the shell argument pointer either starts with"
+						" a '=', is null or points to an empty string.\n");
+		else if (errno == ENOMEM)
 			fprintf(stderr, "warning: no memory available for putenv().\n");
 		else
 			fprintf(stderr,
