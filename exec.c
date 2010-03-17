@@ -49,7 +49,11 @@ static char* parsecmd(const char *cmd);
  * a command, before redirects (if any).
  * Remember to free the pointer.
  */
-static char* parseargs(const char *cmd);
+/* static char* parseargs(const char *cmd);*/
+/**
+ * Parses a cmd to a args string for execvp
+ */
+static char** parsetoargs(const char *cmd);
 
 int exec(const char *cmd) {
 	char *inputfile = NULL, *outputfile = NULL;
@@ -87,17 +91,14 @@ int exec(const char *cmd) {
 
 static int execnopipe(const char *cmd) {
 	int res = 100;
-	char *_cmd = NULL, *_args = NULL;
 	switch (fork()) {
 	case -1:
 		strerror(errno);
 		return errno;
 		break;
 	case 0:
-		_cmd = parsecmd(cmd);
-		_args = parseargs(cmd);
-		res = execlp(_cmd, _args, NULL);
-		_exit(res);
+		res = execvp(parsecmd(cmd), parsetoargs(cmd));
+		exit(res);
 		break;
 	}
 	return res;
@@ -105,7 +106,6 @@ static int execnopipe(const char *cmd) {
 
 static int execipipe(const char *cmd, const char *inputfile) {
 	int res = 100, fin;
-	char *_cmd, *_args;
 	switch (fork()) {
 	case -1:
 		strerror(errno);
@@ -119,22 +119,15 @@ static int execipipe(const char *cmd, const char *inputfile) {
 		}
 		close(0);
 		dup(fin);
-		_cmd = parsecmd(cmd);
-		_args = parseargs(cmd);
-		res = execlp(cmd, cmd, NULL);
+		res = execvp(parsecmd(cmd), parsetoargs(cmd));
 		close(fin);
-		if (_cmd)
-			free(_cmd);
-		if (_args)
-			free(_args);
-		_exit(res);
+		exit(res);
 		break;
 	}
 	return res;
 }
 static int execopipe(const char *cmd, const char *outputfile) {
 	int res = 100, fout;
-	char *_cmd = NULL, *_args = NULL;
 	switch (fork()) {
 	case -1:
 		strerror(errno);
@@ -148,15 +141,9 @@ static int execopipe(const char *cmd, const char *outputfile) {
 		}
 		close(1);
 		dup(fout);
-		_cmd = parsecmd(cmd);
-		_args = parseargs(cmd);
-		res = execlp(cmd, cmd, NULL);
+		res = execvp(parsecmd(cmd), parsetoargs(cmd));
 		close(fout);
-		if (_cmd)
-			free(_cmd);
-		if (_args)
-			free(_args);
-		_exit(res);
+		exit(res);
 		break;
 	}
 	return res;
@@ -164,7 +151,6 @@ static int execopipe(const char *cmd, const char *outputfile) {
 static int execiopipe(const char *cmd, const char *inputfile,
 		const char *outputfile) {
 	int res = 1000, fin, fout;
-	char *_cmd = NULL, *_args = NULL;
 	switch (fork()) {
 	case -1:
 		strerror(errno);
@@ -185,16 +171,10 @@ static int execiopipe(const char *cmd, const char *inputfile,
 		dup(fin);
 		close(1);
 		dup(fout);
-		_cmd = parsecmd(cmd);
-		_args = parseargs(cmd);
-		res = execlp(cmd, cmd, NULL);
+		res = execvp(parsecmd(cmd), parsetoargs(cmd));
 		close(fin);
 		close(fout);
-		if (_cmd)
-			free(_cmd);
-		if (_args)
-			free(_args);
-		_exit(res);
+		exit(res);
 		break;
 	}
 	return res;
@@ -213,6 +193,7 @@ static char* parsenextword(const char *cmd, int offset) {
 			result[pos++] = cmd[i];
 		else if (cmd[i] == ' ' && pos != 0)
 			break;
+	result[pos] = '\0';
 	return result;
 }
 
@@ -223,7 +204,7 @@ static char* parsecmd(const char *cmd) {
 		return NULL;
 	result = malloc(sizeof(*result) * (len + 1));
 	for (i = 0; i < len; i++)
-		if (i == ' ') {
+		if (cmd[i] == ' ') {
 			result[i] = '\0';
 			break;
 		} else
@@ -231,29 +212,23 @@ static char* parsecmd(const char *cmd) {
 	return result;
 }
 
-static char* parseargs(const char *cmd) {
-	int off = -1, i, len = strlen(cmd), pos = 0, endpos = -1;
-	char *result;
-	malloc(sizeof(*result) * (len + 1));
+static char** parsetoargs(const char *cmd) {
+	char **args = malloc(sizeof(**args) * 5);
+	int argcount = 0, i, lastwasspace = 1, len = strlen(cmd), j = 0;
+	for (i = 0; i < 5; i++)
+		args[i] = malloc(4000);
 	for (i = 0; i < len; i++)
-		if (cmd[i] == '<' || cmd[i] == '>')
-			endpos = i + 1;
-	if (endpos == -1)
-		endpos = len;
-	for (i = 0; i < len; i++)
-		if (cmd[i] == ' ' && off == -1)
-			continue;
-		else if (cmd[i] != ' ')
-			off = i;
-		else if (cmd[i] == ' ' && off > 0)
+		if (lastwasspace && cmd[i] != ' ') {
+			lastwasspace = 0;
+			j = 0;
+			args[argcount][j++] = cmd[i];
+		} else if (!lastwasspace && cmd[i] == ' ') {
+			lastwasspace = 1;
+			args[argcount++][j] = '\0';
+		} else if (!lastwasspace && cmd[i] != ' ')
+			args[argcount][j++] = cmd[i];
+		else if (cmd[i] == '<' || cmd[i] == '>')
 			break;
-	for (i = off; i < endpos; i++)
-		if (cmd[i] == ' ' && pos == 0)
-			continue;
-		else if (cmd[i] != ' ' && pos == 0)
-			pos = i;
-		else if (pos != 0)
-			result[pos++] = cmd[i];
-	return result;
+	args[argcount + 1] = NULL;
+	return args;
 }
-
