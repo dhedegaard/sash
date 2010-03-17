@@ -19,5 +19,6 @@
 #include "utility.h"
 #include "parser.h"
 #include "environ.h"
+#include "prompt.h"
 
 #endif /* MAIN_H_ */

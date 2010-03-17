@@ -15,12 +15,13 @@ struct _node_t {
 const char* pop(stack_t *stack) {
 	const char* _e;
 	struct _node_t *oldnode;
-	if (stack == NULL || stack->top == NULL)
+	if (stack == NULL || stack->size == 0)
 		return NULL;
 	_e = stack->top->element;
 	oldnode = stack->top;
 	stack->top = stack->top->next;
 	free(oldnode);
+	stack->size = stack->size - 1;
 	return _e;
 }
 
@@ -32,5 +33,6 @@ int push(stack_t *stack, const char *element) {
 	newnode->element = element;
 	newnode->next = stack->top;
 	stack->top = newnode;
+	stack->size = stack->size + 1;
 	return 1;
 }

@@ -20,6 +20,7 @@
 struct _node_t;
 typedef struct {
 	struct _node_t *top;
+	int size;
 } stack_t;
 
 /**

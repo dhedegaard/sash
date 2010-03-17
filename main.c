@@ -19,7 +19,7 @@ int main(int argc, char **argv, char **env) {
 	setshellpath();
 	setenviron(env);
 	while (1) {
-		printf("%s", PROMPT);
+		printprompt();
 		if (fgets(input, MAX_LINE_LENGTH, stdin) == NULL) {
 			fprintf(stderr, "\nEOF caught, quitting.\n");
 			exit(1);

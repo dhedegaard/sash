@@ -42,11 +42,11 @@ char* trim(const char *string) {
 int startswith(const char *string, const char *startwith) {
 	int stringlen, startwithlen, i;
 	if ((stringlen = strlen(string)) < (startwithlen = strlen(startwith)))
-		return 1;
+		return 0;
 	for (i = 0; i < startwithlen; i++)
 		if (string[i] != startwith[i])
-			return 1;
-	return 0;
+			return 0;
+	return startwithlen;
 }
 
 char* removefirstword(const char *string) {
