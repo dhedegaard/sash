@@ -56,15 +56,16 @@ void cmd_echo(const char *str) {
 }
 
 void cmd_exec(const char *cmd) {
-	pid_t child;
+	/* pid_t child;
 	child = fork();
-	if (child < 0) { /* if unable to fork child. */
-		fprintf(stderr, "command.c:cmd_exec(): Failed to fork process.\n");
+	if (child < 0) { / * if unable to fork child. */
+		/*fprintf(stderr, "command.c:cmd_exec(): Failed to fork process.\n");
 		exit(1);
-	} else if (child == 0) { /* if is child. */
-		int result = system(cmd);
+	} else if (child == 0) { / * if is child. */
+		/*int result = system(cmd);
 		printf("child (%d) returned: %d\n", getpid(), result);
 		_exit(result);
-	}
+	} */
+	exec(cmd);
 }
 

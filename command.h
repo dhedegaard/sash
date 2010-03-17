@@ -16,6 +16,7 @@
 #include "environ.h"
 #include "ls.h"
 #include "cd.h"
+#include "exec.h"
 
 /**
  * Prints some help, this might include possible commands.

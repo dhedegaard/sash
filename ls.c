@@ -35,17 +35,23 @@ void ls_ls(const char *_dir) {
 			if (errno != olderr) {
 				handle_readdir_err();
 				closedir(d);
+				if (stack != NULL) {
+					closestack(stack);
+					free(stack);
+				}
 				return;
 			}
 		}
 		maxlen = stack->size;
 		arr = malloc(sizeof(*arr) * maxlen);
-		/* pop the stack, until it's empty. */
+		/* pop the stack onto a fixed size array. */
 		while (stack->size > 0)
 			arr[pos++] = pop(stack);
+		/* sort and print the array */
 		qsort(arr, maxlen, sizeof(*arr), compare_chars);
 		for (pos = 0; pos < maxlen; pos++)
 			printf("%s\n", arr[pos]);
+		/* cleanup after ourselves. */
 		closedir(d);
 		closestack(stack);
 		free(arr);
