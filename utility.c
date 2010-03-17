@@ -71,6 +71,32 @@ char* getrelativepath(const char *dir) {
 	return newpath;
 }
 
+void patherrorhandling(const char *path) {
+	switch (errno) {
+	case EACCES:
+		fprintf(stderr, "You don't have the proper permissions for: %s\n", path);
+		break;
+	case ELOOP:
+		fprintf(stderr, "There's a symlink loop in the path: %s\n", path);
+		break;
+	case ENAMETOOLONG:
+		fprintf(stderr,
+				"The path length exceeds the c implementations maximum: %s\n",
+				path);
+		break;
+	case ENOENT:
+		fprintf(stderr, "The path specified does not name a directory: %s\n",
+				path);
+		break;
+	case ENOTDIR:
+		fprintf(stderr, "Parts of the path is not a directory: %s\n", path);
+		break;
+	default:
+		fprintf(stderr, "There's no such directory: %s\n", path);
+		break;
+	}
+}
+
 static char* makestring(int left, int right, const char *string) {
 	char *newstr = malloc(sizeof(newstr) * (right - left));
 	memcpy(newstr, string + left, right - left);

@@ -12,9 +12,9 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 #include "stack.h"
+#include "utility.h"
 
 /**
  * Does a simple ls to stdout, if dir is NULL,

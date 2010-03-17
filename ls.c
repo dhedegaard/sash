@@ -36,36 +36,8 @@ void ls_ls(const char *_dir) {
 		for (pos = 0; pos < size; pos++)
 			printf("%s\n", arr[pos]);
 		free(arr);
-	} else {
-		const char *errdir = _dir == NULL ? "." : _dir;
-		switch (errno) {
-		case EACCES:
-			fprintf(stderr, "You don't have the proper permissions for: %s\n",
-					errdir);
-			break;
-		case ELOOP:
-			fprintf(stderr, "There's a symlink loop in the path: %s\n", errdir);
-			break;
-		case ENAMETOOLONG:
-			fprintf(
-					stderr,
-					"The path length exceeds the c implementations maximum: %s\n",
-					errdir);
-			break;
-		case ENOENT:
-			fprintf(stderr,
-					"The path specified does not name a directory : %s\n",
-					errdir);
-			break;
-		case ENOTDIR:
-			fprintf(stderr, "Parts of the path is not a directory: %s\n",
-					errdir);
-			break;
-		default:
-			fprintf(stderr, "There's no such directory: %s\n", errdir);
-			break;
-		}
-	}
+	} else
+		patherrorhandling(_dir == NULL ? "." : _dir);
 }
 
 static int compare_chars(const void *a, const void *b) {
