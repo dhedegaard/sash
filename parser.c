@@ -5,6 +5,12 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <string.h>
+#include <stdlib.h>
+
+#include "global.h"
+#include "utility.h"
+#include "command.h"
 #include "parser.h"
 
 void parse(const char *input) {

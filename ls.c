@@ -5,6 +5,14 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdio.h>
+#include <dirent.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+#include "stack.h"
+#include "utility.h"
 #include "ls.h"
 
 /**

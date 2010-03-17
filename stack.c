@@ -5,6 +5,8 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdlib.h>
+
 #include "stack.h"
 
 struct _node_t {

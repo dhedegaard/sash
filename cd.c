@@ -5,7 +5,12 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "cd.h"
+#include "utility.h"
 
 void cd_cd(const char *dir) {
 	int shouldfree;

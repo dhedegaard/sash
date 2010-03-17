@@ -5,7 +5,13 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include "environ.h"
+#include "global.h"
 
 /**
  * Returns the value before equals in a string, this is

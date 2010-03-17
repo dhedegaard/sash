@@ -8,8 +8,6 @@
 #ifndef STACK_H_
 #define STACK_H_
 
-#include <stdlib.h>
-
 /**
  * A stack definition. Used for allowing more stacks operating
  * at the same time.

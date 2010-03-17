@@ -90,8 +90,8 @@ int exec(const char *cmd) {
 }
 
 static int execnopipe(const char *cmd) {
-	int res = 100;
-	switch (fork()) {
+	int res = 100, childpid;
+	switch ((childpid = fork())) {
 	case -1:
 		strerror(errno);
 		return errno;
@@ -213,22 +213,20 @@ static char* parsecmd(const char *cmd) {
 }
 
 static char** parsetoargs(const char *cmd) {
-	char **args = malloc(sizeof(**args) * 5);
+	char **args = malloc(sizeof(**args) * 10);
 	int argcount = 0, i, lastwasspace = 1, len = strlen(cmd), j = 0;
-	for (i = 0; i < 5; i++)
-		args[i] = malloc(4000);
 	for (i = 0; i < len; i++)
 		if (lastwasspace && cmd[i] != ' ') {
 			lastwasspace = 0;
 			j = 0;
+			args[argcount] = malloc(len);
 			args[argcount][j++] = cmd[i];
 		} else if (!lastwasspace && cmd[i] == ' ') {
 			lastwasspace = 1;
 			args[argcount++][j] = '\0';
-		} else if (!lastwasspace && cmd[i] != ' ')
+		}
+		else if (!lastwasspace && cmd[i] != ' ')
 			args[argcount][j++] = cmd[i];
-		else if (cmd[i] == '<' || cmd[i] == '>')
-			break;
 	args[argcount + 1] = NULL;
 	return args;
 }

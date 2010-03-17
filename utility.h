@@ -8,13 +8,6 @@
 #ifndef UTILITY_H_
 #define UTILITY_H_
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-
-#include "global.h"
-
 /**
  * Does a simple trim of a string, if the string is NULL or
  * everything is spaces and tabs, NULL is returned. Otherwise

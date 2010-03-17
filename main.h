@@ -8,17 +8,6 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h> /* readlink */
-#include <errno.h>
-#include <inttypes.h>
-
-#include "global.h"
-#include "utility.h"
-#include "parser.h"
-#include "environ.h"
-#include "prompt.h"
+int main(int argc, char **argv, char **env);
 
 #endif /* MAIN_H_ */

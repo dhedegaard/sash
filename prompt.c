@@ -5,13 +5,21 @@
  *      Author: neo2k
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
+#include "global.h"
+#include "utility.h"
 #include "prompt.h"
 
 /**
  * Checks to see if dir starts with the homedir, if it does,
  * then the size of the homedir is returned, otherwise 0 is returned.
  */
-static int startswithhomedir(const char *dir);
+/*static int startswithhomedir(const char *dir);*/
 
 void printprompt() {
 	/* char cmd[MAX_LINE_LENGTH];
@@ -63,9 +71,9 @@ void printprompt() {
 	printf("$ ");
 }
 
-static int startswithhomedir(const char *dir) {
+/*static int startswithhomedir(const char *dir) {
 	static char *home;
 	if (home == NULL)
 		getenv("HOME");
 	return home == NULL ? 0 : startswith(dir, home);
-}
+}*/

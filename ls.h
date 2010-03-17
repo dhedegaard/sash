@@ -8,14 +8,6 @@
 #ifndef LS_H_
 #define LS_H_
 
-#include <stdio.h>
-#include <dirent.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "stack.h"
-#include "utility.h"
-
 /**
  * Does a simple ls to stdout, if dir is NULL,
  * it does ls to the current dir.

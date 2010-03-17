@@ -8,13 +8,6 @@
 #ifndef ENVIRON_H_
 #define ENVIRON_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include "global.h"
-
 /**
  * Sets the env variable, this is used later for "querying".
  * This function saves the length of the parameter as well

@@ -14,7 +14,6 @@
  * Defines the maximum length of a line, when passing it from stdin.
  */
 #define MAX_LINE_LENGTH 4096
-#define PROMPT "$ "
 #define REVISION 1
 
 #endif /* GLOBAL_H_ */

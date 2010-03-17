@@ -8,11 +8,6 @@
 #ifndef CD_H_
 #define CD_H_
 
-#include <stdio.h>
-#include <unistd.h>
-
-#include "utility.h"
-
 /**
  * Attempts to change to a particular directory, if that
  * directory doesn't exist, permissions are denied, the

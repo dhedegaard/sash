@@ -8,16 +8,6 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "global.h"
-#include "utility.h"
-#include "environ.h"
-#include "ls.h"
-#include "cd.h"
-#include "exec.h"
-
 /**
  * Prints some help, this might include possible commands.
  */

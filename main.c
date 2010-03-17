@@ -5,6 +5,18 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h> /* readlink */
+#include <errno.h>
+#include <inttypes.h>
+
+#include "global.h"
+#include "utility.h"
+#include "parser.h"
+#include "environ.h"
+#include "prompt.h"
 #include "main.h"
 
 /**
@@ -31,14 +43,14 @@ int main(int argc, char **argv, char **env) {
 
 static void setshellpath() {
 	char *pid, *newshell;
-	pid = malloc(sizeof(*pid) * (PATH_MAX + 1));
-	if (snprintf(pid, PATH_MAX, "/proc/%d/exe", getpid()) <= 0) {
+	pid = malloc(sizeof(*pid) * (MAX_LINE_LENGTH + 1));
+	if (snprintf(pid, MAX_LINE_LENGTH, "/proc/%d/exe", getpid()) <= 0) {
 		fprintf(stderr, "error: unable to get pid, in less than %d chars.\n",
-				PATH_MAX);
+				MAX_LINE_LENGTH);
 		exit(1);
 	}
-	newshell = malloc(sizeof(*newshell) * (PATH_MAX + 1));
-	if (readlink(pid, newshell, PATH_MAX) == -1) {
+	newshell = malloc(sizeof(*newshell) * (MAX_LINE_LENGTH + 1));
+	if (readlink(pid, newshell, MAX_LINE_LENGTH) == -1) {
 		const char *err;
 		switch (errno) {
 		case EACCES:

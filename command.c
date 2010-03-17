@@ -5,7 +5,16 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "command.h"
+#include "global.h"
+#include "utility.h"
+#include "environ.h"
+#include "ls.h"
+#include "cd.h"
+#include "exec.h"
 
 void cmd_help() {
 	char *helpfile = malloc(sizeof(*helpfile) * MAX_LINE_LENGTH);
