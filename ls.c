@@ -41,7 +41,7 @@ void ls_ls(const char *_dir) {
 		maxlen = stack->size;
 		arr = malloc(sizeof(*arr) * maxlen);
 		/* pop the stack, until it's empty. */
-		while (stack->size > 0 && stack->top != NULL)
+		while (stack->size > 0)
 			arr[pos++] = pop(stack);
 		qsort(arr, maxlen, sizeof(*arr), compare_chars);
 		for (pos = 0; pos < maxlen; pos++)
