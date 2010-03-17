@@ -12,6 +12,10 @@
  * compare c string, for sorting out the dirs.
  */
 static int compare_chars(const void *a, const void *b);
+/**
+ * Call if readdir() fails and errno is different from before
+ * the call, then something bad happened.
+ */
 static void handle_readdir_err();
 
 void ls_ls(const char *_dir) {
@@ -19,31 +23,33 @@ void ls_ls(const char *_dir) {
 	struct dirent *dir;
 	int maxlen;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
-		stack_t stack;
+		stack_t *stack = malloc(sizeof(*stack));
 		int pos = 0;
 		const char **arr;
-		stack.top = NULL;
+		stack->top = NULL;
+		stack->size = 0;
 		/* push all the directory names onto a stack. */
 		{
 			int olderr = errno;
 			while ((dir = readdir(d)) != NULL)
-				push(&stack, dir->d_name);
+				push(stack, dir->d_name);
 			if (errno != olderr) {
 				handle_readdir_err();
 				closedir(d);
 				return;
 			}
 		}
-		closedir(d);
-		maxlen = stack.size;
+		maxlen = stack->size;
 		arr = malloc(sizeof(*arr) * maxlen);
 		/* pop the stack, until it's empty. */
-		while (stack.size > 0 && stack.top != NULL)
-			arr[pos++] = pop(&stack);
+		while (stack->size > 0 && stack->top != NULL)
+			arr[pos++] = pop(stack);
 		qsort(arr, maxlen, sizeof(*arr), compare_chars);
 		for (pos = 0; pos < maxlen; pos++)
 			printf("%s\n", arr[pos]);
+		closedir(d);
 		free(arr);
+		free(stack);
 	} else
 		patherrorhandling(_dir == NULL ? "." : _dir);
 }
