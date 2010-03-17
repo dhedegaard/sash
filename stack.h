@@ -24,6 +24,16 @@ typedef struct {
 } stack_t;
 
 /**
+ * Initializes values in the stack. This is required to avoid
+ * weird behavior.
+ */
+void openstack(stack_t *stack);
+/**
+ * Makes sure to release all memory allocated by the stack, before
+ * you free the stack (or an auto variable goes out of scope).
+ */
+void closestack(stack_t *stack);
+/**
  * Pops a specific stack, if the stack is null or the stack is
  * empty, null is returned.
  */

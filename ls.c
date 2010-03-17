@@ -26,8 +26,7 @@ void ls_ls(const char *_dir) {
 		stack_t *stack = malloc(sizeof(*stack));
 		int pos = 0;
 		const char **arr;
-		stack->top = NULL;
-		stack->size = 0;
+		openstack(stack);
 		/* push all the directory names onto a stack. */
 		{
 			int olderr = errno;
@@ -48,6 +47,7 @@ void ls_ls(const char *_dir) {
 		for (pos = 0; pos < maxlen; pos++)
 			printf("%s\n", arr[pos]);
 		closedir(d);
+		closestack(stack);
 		free(arr);
 		free(stack);
 	} else
