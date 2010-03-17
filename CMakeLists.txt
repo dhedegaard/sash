@@ -25,7 +25,6 @@ check_function_exists(chdir HAVE_CHDIR)
 check_function_exists(opendir HAVE_OPENDIR)
 check_function_exists(readdir HAVE_READDIR)
 check_function_exists(closedir HAVE_CLOSEDIR)
-add_executable(sash main.c main.h command.c command.h global.h parser.c
-parser.h utility.c utility.h environ.c environ.h ls.c ls.h cd.c cd.h stack.c
+add_executable(sash main.c main.h command.c command.h parser.c parser.h utility.c utility.h environ.c environ.h ls.c ls.h cd.c cd.h stack.c
 stack.h prompt.c prompt.h exec.c exec.h)
 install (TARGETS sash DESTINATION bin)
