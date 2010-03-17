@@ -9,15 +9,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <limits.h>
 
 #include "environ.h"
-#include "global.h"
 
 /**
  * Returns the value before equals in a string, this is
  * nice for getting the key from a key=value string.
  */
 static char *getvaluebeforeequals(const char *string);
+/**
+ * Gets the cwd into a MAX_PATH pointer, then copies the path
+ * to a more fitting size pointer and frees heap heap from the
+ * first pointer.
+ */
+static void setstartworkdir();
 
 static int _envlen;
 static char **_env;
@@ -28,7 +34,7 @@ void setenviron(char **env) {
 	_env = env;
 	while (env[_envlen] != NULL)
 		_envlen++;
-	_startwd = getcwd(NULL, 0);
+	setstartworkdir();
 }
 
 void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...)) {
@@ -62,4 +68,14 @@ static char *getvaluebeforeequals(const char *string) {
 
 const char *getstartwd() {
 	return _startwd;
+}
+
+static void setstartworkdir() {
+	char *tmp = malloc(PATH_MAX);
+	int len;
+	getcwd(tmp, PATH_MAX);
+	len = strlen(tmp);
+	_startwd = malloc(len + 1);
+	memcpy(_startwd, tmp, len + 1);
+	free(tmp);
 }

@@ -7,9 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "command.h"
-#include "global.h"
 #include "utility.h"
 #include "environ.h"
 #include "ls.h"
@@ -17,7 +17,7 @@
 #include "exec.h"
 
 void cmd_help() {
-	char *helpfile = malloc(sizeof(*helpfile) * MAX_LINE_LENGTH);
+	char *helpfile = malloc(sizeof(*helpfile) * PATH_MAX);
 	FILE *f;
 	if (sprintf(helpfile, "%s/readme", getstartwd()) < 0) {
 		fprintf(stderr, "command.c:sprintf(): error writing to buffer.\n");

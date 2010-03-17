@@ -9,8 +9,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <limits.h>
 
-#include "global.h"
 #include "utility.h"
 
 /**
@@ -69,7 +69,7 @@ char* getrelativepath(const char *dir) {
 	if (dir == NULL)
 		return NULL;
 	len = strlen(dir);
-	newpath = malloc(sizeof(newpath) * MAX_LINE_LENGTH);
+	newpath = malloc(sizeof(newpath) * PATH_MAX);
 	if (len > 0 && dir[0] == '~')
 		sprintf(newpath, "%s%s", getenv("HOME"), dir + 1);
 	else

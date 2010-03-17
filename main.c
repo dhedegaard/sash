@@ -11,8 +11,8 @@
 #include <unistd.h> /* readlink */
 #include <errno.h>
 #include <inttypes.h>
+#include <limits.h>
 
-#include "global.h"
 #include "utility.h"
 #include "parser.h"
 #include "environ.h"
@@ -26,13 +26,13 @@
 static void setshellpath();
 
 int main(int argc, char **argv, char **env) {
-	char input[MAX_LINE_LENGTH];
-	printf("sash shell revision: %d\n", REVISION);
+	char input[LINE_MAX];
+	printf("sash shell revision: %d\n", 1);
 	setshellpath();
 	setenviron(env);
 	while (1) {
 		printprompt();
-		if (fgets(input, MAX_LINE_LENGTH, stdin) == NULL) {
+		if (fgets(input, LINE_MAX, stdin) == NULL) {
 			fprintf(stderr, "\nEOF caught, quitting.\n");
 			exit(1);
 		}
@@ -43,14 +43,14 @@ int main(int argc, char **argv, char **env) {
 
 static void setshellpath() {
 	char *pid, *newshell;
-	pid = malloc(sizeof(*pid) * (MAX_LINE_LENGTH + 1));
-	if (snprintf(pid, MAX_LINE_LENGTH, "/proc/%d/exe", getpid()) <= 0) {
+	pid = malloc(sizeof(*pid) * (PATH_MAX + 1));
+	if (snprintf(pid, PATH_MAX, "/proc/%d/exe", getpid()) <= 0) {
 		fprintf(stderr, "error: unable to get pid, in less than %d chars.\n",
-				MAX_LINE_LENGTH);
+				PATH_MAX);
 		exit(1);
 	}
-	newshell = malloc(sizeof(*newshell) * (MAX_LINE_LENGTH + 1));
-	if (readlink(pid, newshell, MAX_LINE_LENGTH) == -1) {
+	newshell = malloc(sizeof(*newshell) * (PATH_MAX + 1));
+	if (readlink(pid, newshell, PATH_MAX) == -1) {
 		const char *err;
 		switch (errno) {
 		case EACCES:

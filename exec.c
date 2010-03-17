@@ -12,7 +12,6 @@
 #include <stdlib.h>
 
 #include "exec.h"
-#include "global.h"
 
 /**
  * Execute without redirection.

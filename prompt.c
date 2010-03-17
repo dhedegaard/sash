@@ -11,7 +11,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "global.h"
 #include "utility.h"
 #include "prompt.h"
 
