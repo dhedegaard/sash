@@ -2,7 +2,7 @@
  * prompt.c
  *
  *  Created on: 17/03/2010
- *      Author: neo2k
+ *      Author: Dennis Hedegaard
  */
 
 #include <stdio.h>

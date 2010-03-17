@@ -202,8 +202,8 @@ static char* parsecmd(const char *cmd) {
 	if (cmd == NULL)
 		return NULL;
 	result = malloc(sizeof(*result) * (len + 1));
-	for (i = 0; i < len; i++)
-		if (cmd[i] == ' ') {
+	for (i = 0; i < len + 1; i++)
+		if (cmd[i] == ' ' || cmd[i] == '\0') {
 			result[i] = '\0';
 			break;
 		} else
@@ -212,8 +212,10 @@ static char* parsecmd(const char *cmd) {
 }
 
 static char** parsetoargs(const char *cmd) {
-	char **args = malloc(sizeof(**args) * 10);
+	char **args = malloc(sizeof(*args) * 10);
 	int argcount = 0, i, lastwasspace = 1, len = strlen(cmd), j = 0;
+	for (i = 0; i < 10; i++)
+		args[i] = NULL;
 	for (i = 0; i < len; i++)
 		if (lastwasspace && cmd[i] != ' ') {
 			lastwasspace = 0;
@@ -223,9 +225,8 @@ static char** parsetoargs(const char *cmd) {
 		} else if (!lastwasspace && cmd[i] == ' ') {
 			lastwasspace = 1;
 			args[argcount++][j] = '\0';
-		}
-		else if (!lastwasspace && cmd[i] != ' ')
+		} else if (!lastwasspace && cmd[i] != ' ')
 			args[argcount][j++] = cmd[i];
-	args[argcount + 1] = NULL;
+	args[argcount][j] = '\0';
 	return args;
 }
