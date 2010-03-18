@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <ctype.h>
 
 #include "utility.h"
 
@@ -24,19 +25,18 @@ static char* makestring(int left, int right, const char *string);
 static int checkvalid(char c);
 
 char* trim(const char *string) {
-	int left, right = 0, i;
+	int left = 0, right = 0, i;
 	if (string == NULL)
 		return NULL;
-	left = 0;
 	right = strlen(string) - 1;
 	for (i = 0; i <= right; i++)
 		if (!checkvalid(string[i]))
-			left = i;
+			left = i + 1;
 		else
 			break;
 	for (i = right; i >= left; i--)
 		if (!checkvalid(string[i]))
-			right = i;
+			right = i - 1;
 		else
 			break;
 	if (left >= right)
@@ -104,12 +104,14 @@ void patherrorhandling(const char *path) {
 }
 
 static char* makestring(int left, int right, const char *string) {
-	char *newstr = malloc(sizeof(newstr) * (right - left));
-	memcpy(newstr, string + left, right - left);
-	newstr[right - left] = '\0';
+	int len = strlen(string), i, pos = 0;
+	char *newstr = malloc(len);
+	for (i = left; i <= right; i++)
+		newstr[pos++] = string[i];
+	newstr[pos] = '\0';
 	return newstr;
 }
 
 static int checkvalid(char c) {
-	return (c != ' ' && c != '\t' && c != '\n') ? 1 : 0;
+	return (!isspace(c) && c != '\n') ? 1 : 0;
 }

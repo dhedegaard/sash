@@ -53,9 +53,13 @@ static char* parsecmd(const char *cmd);
  * Parses a cmd to a args string for execvp
  */
 static char** parsetoargs(const char *cmd);
+/**
+ * Parse the command line without pipes.
+ */
+static char* parsewithoutpipes(const char* cmd);
 
 int exec(const char *cmd) {
-	char *inputfile = NULL, *outputfile = NULL;
+	char *inputfile = NULL, *outputfile = NULL, *realcmd = NULL;
 	int i, len = strlen(cmd), lineend = -1;
 	for (i = 0; i < len; i++)
 		switch (cmd[i]) {
@@ -70,16 +74,28 @@ int exec(const char *cmd) {
 				lineend = i;
 			break;
 		}
+	if (lineend != -1) {
+		int i;
+		realcmd = malloc(strlen(cmd) - lineend + 2);
+		for (i = 0; i < lineend; i++)
+			if ((cmd[i] == '<' || cmd[i] == '>') && i > 0)
+				realcmd[i] = '\0';
+			else
+				realcmd[i] = cmd[i];
+		if (realcmd[i - 1] != '\0')
+			realcmd[i] = '\0';
+	} else
+		realcmd = (char*) cmd;
 	if (inputfile == NULL) {
 		if (outputfile == NULL)
-			execnopipe(cmd);
+			execnopipe(realcmd);
 		else
-			execopipe(cmd, outputfile);
+			execopipe(realcmd, outputfile);
 	} else {
 		if (outputfile == NULL)
-			execipipe(cmd, inputfile);
+			execipipe(realcmd, inputfile);
 		else
-			execiopipe(cmd, inputfile, outputfile);
+			execiopipe(realcmd, inputfile, outputfile);
 	}
 	if (inputfile)
 		free(inputfile);
@@ -229,4 +245,22 @@ static char** parsetoargs(const char *cmd) {
 			args[argcount][j++] = cmd[i];
 	args[argcount][j] = '\0';
 	return args;
+}
+
+static char* parsewithoutpipes(const char* cmd) {
+	int i, pos = -1, len = strlen(cmd);
+	char *result = NULL, *trimmed = NULL;
+	result = malloc(len + 1);
+	for (i = 0;i < len;i++)
+		if (cmd[i] == '<' || cmd[i] == '>') {
+			pos = i - 1;
+			break;
+		}
+	if (pos == -1)
+		memcpy(result, cmd, len + 2);
+	else
+		memcpy(result, cmd, pos + 1);
+	trimmed = trim(result);
+	free(result);
+	return trimmed;
 }
