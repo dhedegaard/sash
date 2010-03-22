@@ -18,13 +18,44 @@
  * Allocates and makes a new string based on the input from trim.
  * It always allocates 1 extra byte, for terminating the string (\0).
  */
-static char* makestring(int left, int right, const char *string);
+/* static char* makestring(int left, int right, const char *string); */
 /**
  * Checks to see if a char is "valid", meaning it shouldn't get trimmed.
  */
-static int checkvalid(char c);
+/* static int checkvalid(char c); */
 
-char* trim(const char *string) {
+char* trim(const char *str) {
+        char *result = NULL;
+        const char *strp;
+        int len;
+        if (str == NULL)
+                return NULL;
+        while (isspace(*str)) {
+                if (*str == '\0')
+                        return NULL;
+                str++;
+        }
+        if (*str == '\0') {
+                result = malloc(1);
+                *result = '\0';
+                return result;
+        }
+        strp = str;
+        while (*strp != '\0')
+                strp++;
+        if (*strp == '\0')
+                strp--;
+        while (isspace(*strp) || *strp == '\n')
+                strp--;
+        len = strp - str + 1;
+        result = calloc(sizeof(*result), len + 1);
+        memcpy(result, str, len);
+        *(result + len) = '\0';
+        return result;
+}
+
+/* The old trim implementation. */
+/* char* trim(const char *string) {
 	int left = 0, right = 0, i;
 	if (string == NULL)
 		return NULL;
@@ -43,7 +74,7 @@ char* trim(const char *string) {
 		return NULL;
 	else
 		return makestring(left, right, string);
-}
+} */
 
 int startswith(const char *string, const char *startwith) {
 	int stringlen, startwithlen, i;
@@ -103,6 +134,8 @@ void patherrorhandling(const char *path) {
 	}
 }
 
+/* TODO clean */
+/*
 static char* makestring(int left, int right, const char *string) {
 	int len = strlen(string), i, pos = 0;
 	char *newstr = malloc(len);
@@ -110,8 +143,8 @@ static char* makestring(int left, int right, const char *string) {
 		newstr[pos++] = string[i];
 	newstr[pos] = '\0';
 	return newstr;
-}
+} */
 
-static int checkvalid(char c) {
+/* static int checkvalid(char c) {
 	return (!isspace(c) && c != '\n') ? 1 : 0;
-}
+} */
