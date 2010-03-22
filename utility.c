@@ -25,7 +25,14 @@
  assert(strcmp(trim("   eqwqwe  eqw     "), "eqwqwe  eqw") == 0);
  assert(strcmp(trim("  hej  "), "hej") == 0);
  assert(strcmp(trim(" hej  "), "hej") == 0);
+ assert(strcmp(trim("hej\n"), "hej") == 0);
+ assert(strcmp(trim("  hej  \n"), "hej") == 0);
+ assert(strcmp(trim("  hej sa  \n  \n"), "hej sa") == 0);
+ assert(strcmp(trim("  \n   hej"), "hej") == 0);
+ assert(strcmp(trim("\n    \nhej\n    \n"), "hej") == 0);
+ assert(strcmp(trim("hej\nhej\n"), "hej\nhej") == 0);
  return 0;
+ }
  */
 char* trim(const char *str) {
 	char *result = NULL;
@@ -45,7 +52,7 @@ char* trim(const char *str) {
 		strp++;
 	if (*strp == '\0')
 		strp--;
-	while (isspace(*strp) || *strp == '\n')
+	while (isspace(*strp))
 		strp--;
 	len = strp - str + 1;
 	result = calloc(sizeof(*result), len);
