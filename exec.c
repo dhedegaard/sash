@@ -10,6 +10,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
+
+/* TODO: remember to remove, once done debugging (printf). */
+#include <stdio.h>
 
 #include "exec.h"
 
@@ -56,7 +60,7 @@ static char** parsetoargs(const char *cmd);
 /**
  * Parse the command line without pipes.
  */
-static char* parsewithoutpipes(const char* cmd);
+/*static char* parsewithoutpipes(const char* cmd);*/
 
 int exec(const char *cmd) {
 	char *inputfile = NULL, *outputfile = NULL, *realcmd = NULL;
@@ -280,11 +284,64 @@ static char* parsecmd(const char *cmd) {
 	return result;
 }
 
+/**
+ * Tests run:
+ int main() {
+ assert(parsetoargs(NULL) == NULL);
+ assert(strcmp(parsetoargs("")[0], "") == 0);
+ assert(strcmp(parsetoargs("  ")[0], "") == 0);
+ assert(strcmp(parsetoargs("hej")[0], "hej") == 0);
+ assert(parsetoargs("hej")[1] == NULL);
+ assert(strcmp(parsetoargs(" hej")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("hej ")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("   hej   ")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("hej dav")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("hej dav")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("  hej dav")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("  hej dav")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("  hej  dav")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("  hej  dav")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("hej dav  ")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("hej dav  ")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("hej  dav   ")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("hej  dav   ")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("  hej dav  ")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("  hej dav  ")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("   hej  dav   ")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("   hej  dav   ")[1], "dav") == 0);
+ printf("test completed.\n");
+ return 0;
+ }
+ */
 static char** parsetoargs(const char *cmd) {
-	char **args = malloc(sizeof(*args) * 10);
-	int argcount = 0, i, lastwasspace = 1, len = strlen(cmd), j = 0;
-	for (i = 0; i < 10; i++)
+	char **args;
+	const char* pcmd;
+	int argcount = 0, i, lastwasspace = 1, len, j = 0, arrlen = 1;
+	if (cmd == NULL)
+		return NULL;
+	pcmd = cmd;
+	while (*pcmd != '\0') {
+		if (isspace(*pcmd) && !lastwasspace)
+			lastwasspace = 1;
+		else if (!isspace(*pcmd) && lastwasspace) {
+			lastwasspace = 0;
+			arrlen++;
+		}
+		pcmd++;
+	}
+	args = malloc(sizeof(*args) * arrlen);
+	len = strlen(cmd);
+	while (isspace(*(cmd + len - 1)))
+		len--;
+	if (len == 0) {
+		args[0] = malloc(1);
+		args[0][0] = '\0';
+		args[1] = NULL;
+		return args;
+	}
+	for (i = 0; i < arrlen; i++)
 		args[i] = NULL;
+	lastwasspace = 1;
 	for (i = 0; i < len; i++)
 		if (lastwasspace && cmd[i] != ' ') {
 			lastwasspace = 0;
@@ -300,20 +357,20 @@ static char** parsetoargs(const char *cmd) {
 	return args;
 }
 
-static char* parsewithoutpipes(const char* cmd) {
-	int i, pos = -1, len = strlen(cmd);
-	char *result = NULL, *trimmed = NULL;
-	result = malloc(len + 1);
-	for (i = 0; i < len; i++)
-		if (cmd[i] == '<' || cmd[i] == '>') {
-			pos = i - 1;
-			break;
-		}
-	if (pos == -1)
-		memcpy(result, cmd, len + 2);
-	else
-		memcpy(result, cmd, pos + 1);
-	trimmed = trim(result);
-	free(result);
-	return trimmed;
-}
+/* static char* parsewithoutpipes(const char* cmd) {
+ int i, pos = -1, len = strlen(cmd);
+ char *result = NULL, *trimmed = NULL;
+ result = malloc(len + 1);
+ for (i = 0; i < len; i++)
+ if (cmd[i] == '<' || cmd[i] == '>') {
+ pos = i - 1;
+ break;
+ }
+ if (pos == -1)
+ memcpy(result, cmd, len + 2);
+ else
+ memcpy(result, cmd, pos + 1);
+ trimmed = trim(result);
+ free(result);
+ return trimmed;
+ }*/
