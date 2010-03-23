@@ -86,6 +86,11 @@ int exec(const char *cmd) {
 			realcmd[i] = '\0';
 	} else
 		realcmd = (char*) cmd;
+	printf("realcmd: \"%s\"\n", realcmd);
+	if (outputfile != NULL)
+		printf("outputfile: \"%s\"\n", outputfile);
+	if (inputfile != NULL)
+		printf("inputfile: \"%s\"\n", inputfile);
 	if (inputfile == NULL) {
 		if (outputfile == NULL)
 			execnopipe(realcmd);
@@ -156,7 +161,17 @@ static int execopipe(const char *cmd, const char *outputfile) {
 		}
 		close(1);
 		dup(fout);
-		res = execvp(parsecmd(cmd), parsetoargs(cmd));
+		{
+			char* parsecmd1 = parsecmd(cmd);
+			char** parsetoargs1 = parsetoargs(cmd);
+			int i = 0;
+			printf("parsecmd: \"%s\"\n", parsecmd1);
+			while (parsetoargs != NULL) {
+				printf("parse[%d]: \"%s\"\n", i++, *parsetoargs1);
+				parsetoargs1++;
+			}
+			res = execvp(parsecmd(cmd), parsetoargs(cmd));
+		}
 		close(fout);
 		exit(res);
 		break;
@@ -212,18 +227,56 @@ static char* parsenextword(const char *cmd, int offset) {
 	return result;
 }
 
+/**
+ * Tested with:
+ int main() {
+ assert(parsecmd(NULL) == NULL);
+ assert(strcmp(parsecmd(""), "") == 0);
+ assert(strcmp(parsecmd("  "), "") == 0);
+ assert(strcmp(parsecmd("hej"), "hej") == 0);
+ assert(strcmp(parsecmd("hej "), "hej") == 0);
+ assert(strcmp(parsecmd("hej dav"), "hej") == 0);
+ assert(strcmp(parsecmd(" hej"), "hej") == 0);
+ assert(strcmp(parsecmd(" hej "), "hej") == 0);
+ assert(strcmp(parsecmd("   hej dav     "), "hej") == 0);
+ printf("test complete!\n");
+ return 0;
+ }
+ */
 static char* parsecmd(const char *cmd) {
-	int i, len = strlen(cmd);
+	int len = 0;
 	char *result;
+	const char *pcmd;
 	if (cmd == NULL)
 		return NULL;
-	result = malloc(sizeof(*result) * (len + 1));
-	for (i = 0; i < len + 1; i++)
-		if (cmd[i] == ' ' || cmd[i] == '\0') {
-			result[i] = '\0';
-			break;
-		} else
-			result[i] = cmd[i];
+	/* move past starting spaces, or if the string
+	 * is empty, to the null terminator.
+	 */
+	while (isspace(*cmd) && *cmd != '\0')
+		cmd++;
+	/* If the string is empty or all spaces, return
+	 * an empty string.
+	 */
+	if (*cmd == '\0') {
+		result = malloc(1);
+		*result = '\0';
+		return result;
+	}
+	pcmd = cmd;
+	/* from the start of the command, run len++ until
+	 * a space or null terminator is found.
+	 */
+	while (!isspace(*pcmd) && *pcmd != '\0') {
+		pcmd++;
+		len++;
+	}
+	/* Now allocate len + 1 bytes, copy len bytes from
+	 * cmd to result, null terminate the string and return.
+	 */
+	result = malloc(len + 1);
+	pcmd = cmd;
+	memcpy(result, cmd, len);
+	*(result + len) = '\0';
 	return result;
 }
 
@@ -251,7 +304,7 @@ static char* parsewithoutpipes(const char* cmd) {
 	int i, pos = -1, len = strlen(cmd);
 	char *result = NULL, *trimmed = NULL;
 	result = malloc(len + 1);
-	for (i = 0;i < len;i++)
+	for (i = 0; i < len; i++)
 		if (cmd[i] == '<' || cmd[i] == '>') {
 			pos = i - 1;
 			break;
