@@ -13,7 +13,8 @@ release 2:
 fork() and exec() all other statements.
 
 release 3:
-batch files as args.
+batch files as args on startup,
+the shell should exit after the script is done.
 
 release 4:
 io redirection using < and >, eg:
@@ -21,7 +22,7 @@ app arg1 arg < inputfile > outputfile
 this includes ls, environ, echo and help.
 
 release 5:
-support background execution using ampersand.
+support background execution using ampersand(&).
 
 release 6:
-change to prompt to show the current dir name.
+change the prompt to show the current dir name.
