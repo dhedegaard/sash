@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <sys/wait.h>
 
 /* TODO: remember to remove, once done debugging (printf). */
 #include <stdio.h>
@@ -20,15 +21,15 @@
 /**
  * Execute without redirection.
  */
-static int execnopipe(const char *cmd);
+/*static int execnopipe(const char *cmd);*/
 /**
  * Execute and redirect input to an file.
  */
-static int execipipe(const char *cmd, const char *inputfile);
+/*static int execipipe(const char *cmd, const char *inputfile);*/
 /**
  * Execute and redirect output to a file.
  */
-static int execopipe(const char *cmd, const char *outputfile);
+/*static int execopipe(const char *cmd, const char *outputfile);*/
 /**
  * Execute and return both input and output to different file.
  */
@@ -95,17 +96,18 @@ int exec(const char *cmd) {
 		printf("outputfile: \"%s\"\n", outputfile);
 	if (inputfile != NULL)
 		printf("inputfile: \"%s\"\n", inputfile);
-	if (inputfile == NULL) {
-		if (outputfile == NULL)
-			execnopipe(realcmd);
-		else
-			execopipe(realcmd, outputfile);
-	} else {
-		if (outputfile == NULL)
-			execipipe(realcmd, inputfile);
-		else
-			execiopipe(realcmd, inputfile, outputfile);
-	}
+	/* if (inputfile == NULL) {
+	 if (outputfile == NULL)
+	 execnopipe(realcmd);
+	 else
+	 execopipe(realcmd, outputfile);
+	 } else {
+	 if (outputfile == NULL)
+	 execipipe(realcmd, inputfile);
+	 else
+	 execiopipe(realcmd, inputfile, outputfile);
+	 }*/
+	execiopipe(realcmd, inputfile, outputfile);
 	if (inputfile)
 		free(inputfile);
 	if (outputfile)
@@ -113,103 +115,116 @@ int exec(const char *cmd) {
 	return 0;
 }
 
-static int execnopipe(const char *cmd) {
-	int res = 100, childpid;
-	switch ((childpid = fork())) {
-	case -1:
-		strerror(errno);
-		return errno;
-		break;
-	case 0:
-		res = execvp(parsecmd(cmd), parsetoargs(cmd));
-		exit(res);
-		break;
-	}
-	return res;
-}
+/* static int execnopipe(const char *cmd) {
+ int res = 100, childpid;
+ switch ((childpid = fork())) {
+ case -1:
+ strerror(errno);
+ return errno;
+ break;
+ case 0:
+ res = execvp(parsecmd(cmd), parsetoargs(cmd));
+ exit(res);
+ break;
+ default:
+ waitpid(childpid, &res, 0);
+ }
+ return res;
+ }
 
-static int execipipe(const char *cmd, const char *inputfile) {
-	int res = 100, fin;
-	switch (fork()) {
-	case -1:
-		strerror(errno);
-		return errno;
-		break;
-	case 0:
-		if ((fin = open(inputfile, O_RDONLY)) == -1) {
-			strerror(errno);
-			res = errno;
-			_exit(errno);
-		}
-		close(0);
-		dup(fin);
-		res = execvp(parsecmd(cmd), parsetoargs(cmd));
-		close(fin);
-		exit(res);
-		break;
-	}
-	return res;
-}
-static int execopipe(const char *cmd, const char *outputfile) {
-	int res = 100, fout;
-	switch (fork()) {
-	case -1:
-		strerror(errno);
-		return errno;
-		break;
-	case 0:
-		if ((fout = open(outputfile, O_WRONLY + O_CREAT, 0755)) == -1) {
-			strerror(errno);
-			res = errno;
-			_exit(errno);
-		}
-		close(1);
-		dup(fout);
-		{
-			char* parsecmd1 = parsecmd(cmd);
-			char** parsetoargs1 = parsetoargs(cmd);
-			int i = 0;
-			printf("parsecmd: \"%s\"\n", parsecmd1);
-			while (parsetoargs != NULL) {
-				printf("parse[%d]: \"%s\"\n", i++, *parsetoargs1);
-				parsetoargs1++;
-			}
-			res = execvp(parsecmd(cmd), parsetoargs(cmd));
-		}
-		close(fout);
-		exit(res);
-		break;
-	}
-	return res;
-}
+ static int execipipe(const char *cmd, const char *inputfile) {
+ int res = 100, fin;
+ switch (fork()) {
+ case -1:
+ strerror(errno);
+ return errno;
+ break;
+ case 0:
+ if ((fin = open(inputfile, O_RDONLY)) == -1) {
+ strerror(errno);
+ res = errno;
+ _exit(errno);
+ }
+ close(0);
+ dup(fin);
+ res = execvp(parsecmd(cmd), parsetoargs(cmd));
+ close(fin);
+ exit(res);
+ break;
+ }
+ return res;
+ }
+ static int execopipe(const char *cmd, const char *outputfile) {
+ int res = 100, fout;
+ switch (fork()) {
+ case -1:
+ strerror(errno);
+ return errno;
+ break;
+ case 0:
+ if ((fout = open(outputfile, O_WRONLY + O_CREAT, 0755)) == -1) {
+ strerror(errno);
+ res = errno;
+ _exit(errno);
+ }
+ close(1);
+ dup(fout);
+ {
+ char* parsecmd1 = parsecmd(cmd);
+ char** parsetoargs1 = parsetoargs(cmd);
+ int i = 0;
+ printf("parsecmd: \"%s\"\n", parsecmd1);
+ while (parsetoargs != NULL) {
+ printf("parse[%d]: \"%s\"\n", i++, *parsetoargs1);
+ parsetoargs1++;
+ }
+ res = execvp(parsecmd(cmd), parsetoargs(cmd));
+ }
+ close(fout);
+ exit(res);
+ break;
+ }
+ printf("cmd: %s\n", cmd);
+ return res;
+ } */
+
 static int execiopipe(const char *cmd, const char *inputfile,
 		const char *outputfile) {
-	int res = 1000, fin, fout;
-	switch (fork()) {
+	int res = 1000, fin, fout, childpid;
+	switch (childpid = fork()) {
 	case -1:
 		strerror(errno);
 		return errno;
 		break;
 	case 0:
-		if ((fin = open(inputfile, O_RDONLY)) == -1) {
-			strerror(errno);
-			res = errno;
-			_exit(errno);
+		if (inputfile != NULL) {
+			if ((fin = open(inputfile, O_RDONLY)) == -1) {
+				strerror(errno);
+				res = errno;
+				_exit(errno);
+			}
+			close(0);
+			dup(fin);
 		}
-		if ((fout = open(outputfile, O_WRONLY + O_CREAT, 0755)) == -1) {
-			strerror(errno);
-			res = errno;
-			_exit(errno);
+		if (outputfile != NULL) {
+			if ((fout = open(outputfile, O_WRONLY + O_CREAT, 0755)) == -1) {
+				strerror(errno);
+				res = errno;
+				_exit(errno);
+			}
+			close(1);
+			dup(fout);
 		}
-		close(0);
-		dup(fin);
-		close(1);
-		dup(fout);
 		res = execvp(parsecmd(cmd), parsetoargs(cmd));
-		close(fin);
-		close(fout);
+		if (inputfile != NULL)
+			close(fin);
+		if (outputfile != NULL)
+			close(fout);
 		exit(res);
 		break;
+	default:
+		waitpid(childpid, &res, 0);
+		printf("child returned: %d\n", res);
 	}
 	return res;
 }
@@ -309,6 +324,10 @@ static char* parsecmd(const char *cmd) {
  assert(strcmp(parsetoargs("  hej dav  ")[1], "dav") == 0);
  assert(strcmp(parsetoargs("   hej  dav   ")[0], "hej") == 0);
  assert(strcmp(parsetoargs("   hej  dav   ")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("hej dav svend")[0], "hej") == 0);
+ assert(strcmp(parsetoargs("hej dav svend")[1], "dav") == 0);
+ assert(strcmp(parsetoargs("hej dav svend")[2], "svend") == 0);
+ assert(parsetoargs("hej dav svend")[3] == NULL);
  printf("test completed.\n");
  return 0;
  }
