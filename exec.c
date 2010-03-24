@@ -12,24 +12,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <sys/wait.h>
-
-/* TODO: remember to remove, once done debugging (printf). */
 #include <stdio.h>
 
 #include "exec.h"
 
-/**
- * Execute without redirection.
- */
-/*static int execnopipe(const char *cmd);*/
-/**
- * Execute and redirect input to an file.
- */
-/*static int execipipe(const char *cmd, const char *inputfile);*/
-/**
- * Execute and redirect output to a file.
- */
-/*static int execopipe(const char *cmd, const char *outputfile);*/
 /**
  * Execute and return both input and output to different file.
  */
@@ -49,19 +35,9 @@ static char* parsenextword(const char *cmd, int offset);
  */
 static char* parsecmd(const char *cmd);
 /**
- * Takes out the arguments for a command, this is everything after
- * a command, before redirects (if any).
- * Remember to free the pointer.
- */
-/* static char* parseargs(const char *cmd);*/
-/**
  * Parses a cmd to a args string for execvp
  */
 static char** parsetoargs(const char *cmd);
-/**
- * Parse the command line without pipes.
- */
-/*static char* parsewithoutpipes(const char* cmd);*/
 
 int exec(const char *cmd) {
 	char *inputfile = NULL, *outputfile = NULL, *realcmd = NULL;
@@ -96,17 +72,6 @@ int exec(const char *cmd) {
 		printf("outputfile: \"%s\"\n", outputfile);
 	if (inputfile != NULL)
 		printf("inputfile: \"%s\"\n", inputfile);
-	/* if (inputfile == NULL) {
-	 if (outputfile == NULL)
-	 execnopipe(realcmd);
-	 else
-	 execopipe(realcmd, outputfile);
-	 } else {
-	 if (outputfile == NULL)
-	 execipipe(realcmd, inputfile);
-	 else
-	 execiopipe(realcmd, inputfile, outputfile);
-	 }*/
 	execiopipe(realcmd, inputfile, outputfile);
 	if (inputfile)
 		free(inputfile);
@@ -114,79 +79,6 @@ int exec(const char *cmd) {
 		free(outputfile);
 	return 0;
 }
-
-/* static int execnopipe(const char *cmd) {
- int res = 100, childpid;
- switch ((childpid = fork())) {
- case -1:
- strerror(errno);
- return errno;
- break;
- case 0:
- res = execvp(parsecmd(cmd), parsetoargs(cmd));
- exit(res);
- break;
- default:
- waitpid(childpid, &res, 0);
- }
- return res;
- }
-
- static int execipipe(const char *cmd, const char *inputfile) {
- int res = 100, fin;
- switch (fork()) {
- case -1:
- strerror(errno);
- return errno;
- break;
- case 0:
- if ((fin = open(inputfile, O_RDONLY)) == -1) {
- strerror(errno);
- res = errno;
- _exit(errno);
- }
- close(0);
- dup(fin);
- res = execvp(parsecmd(cmd), parsetoargs(cmd));
- close(fin);
- exit(res);
- break;
- }
- return res;
- }
- static int execopipe(const char *cmd, const char *outputfile) {
- int res = 100, fout;
- switch (fork()) {
- case -1:
- strerror(errno);
- return errno;
- break;
- case 0:
- if ((fout = open(outputfile, O_WRONLY + O_CREAT, 0755)) == -1) {
- strerror(errno);
- res = errno;
- _exit(errno);
- }
- close(1);
- dup(fout);
- {
- char* parsecmd1 = parsecmd(cmd);
- char** parsetoargs1 = parsetoargs(cmd);
- int i = 0;
- printf("parsecmd: \"%s\"\n", parsecmd1);
- while (parsetoargs != NULL) {
- printf("parse[%d]: \"%s\"\n", i++, *parsetoargs1);
- parsetoargs1++;
- }
- res = execvp(parsecmd(cmd), parsetoargs(cmd));
- }
- close(fout);
- exit(res);
- break;
- }
- printf("cmd: %s\n", cmd);
- return res;
- } */
 
 static int execiopipe(const char *cmd, const char *inputfile,
 		const char *outputfile) {
@@ -229,12 +121,43 @@ static int execiopipe(const char *cmd, const char *inputfile,
 	return res;
 }
 
+/**
+ * tests run:
+ int main() {
+ assert(parsenextword(NULL, 0) == NULL);
+ assert(parsenextword(NULL, -10) == NULL);
+ assert(parsenextword(NULL, 100) == NULL);
+ assert(strcmp(parsenextword("hej dav hej2", 0), "hej") == 0);
+ assert(strcmp(parsenextword("hej dav hej2", 3), "dav") == 0);
+ assert(strcmp(parsenextword("hej dav hej2", 7), "hej2") == 0);
+ assert(parsenextword("hej dav hej2", -10) == 0);
+ assert(strcmp(parsenextword(" hej dav hej2", 0), "hej") == 0);
+ assert(strcmp(parsenextword(" hej dav hej2", 4), "dav") == 0);
+ assert(strcmp(parsenextword(" hej dav hej2", 9), "hej2") == 0);
+ assert(parsenextword(" hej dav hej2", -10) == 0);
+ assert(parsenextword(" hej dav hej2", 15) == 0);
+ assert(parsenextword(" hej dav hej2", 15) == 0);
+ assert(strcmp(parsenextword(" hej  dav  hej2  ", 0), "hej") == 0);
+ assert(strcmp(parsenextword(" hej  dav  hej2  ", 5), "dav") == 0);
+ assert(strcmp(parsenextword(" hej  dav  hej2  ", 9), "hej2") == 0);
+ assert(parsenextword("hej         ", 6) == NULL);
+ printf("test complete.\n");
+ return(0);
+ }
+ */
 static char* parsenextword(const char *cmd, int offset) {
-	int len = strlen(cmd), i, pos = 0;
+	int len, i, pos = 0;
 	char *result;
-	if (offset >= len)
+	if (cmd == NULL)
 		return NULL;
-	result = malloc(sizeof(*result) * (len - offset + 1));
+	while (isspace(*cmd)) {
+		cmd++;
+		offset -= offset > 0 ? 1 : 0;
+	}
+	len = strlen(cmd);
+	if (offset < 0 || offset >= len)
+		return NULL;
+	result = malloc(len - offset + 1);
 	for (i = offset; i < len; i++)
 		if (cmd[i] == ' ' && pos == 0)
 			;
@@ -243,7 +166,11 @@ static char* parsenextword(const char *cmd, int offset) {
 		else if (cmd[i] == ' ' && pos != 0)
 			break;
 	result[pos] = '\0';
-	return result;
+	if (*result == '\0') {
+		free(result);
+		return NULL;
+	} else
+		return result;
 }
 
 /**
@@ -375,21 +302,3 @@ static char** parsetoargs(const char *cmd) {
 	args[argcount][j] = '\0';
 	return args;
 }
-
-/* static char* parsewithoutpipes(const char* cmd) {
- int i, pos = -1, len = strlen(cmd);
- char *result = NULL, *trimmed = NULL;
- result = malloc(len + 1);
- for (i = 0; i < len; i++)
- if (cmd[i] == '<' || cmd[i] == '>') {
- pos = i - 1;
- break;
- }
- if (pos == -1)
- memcpy(result, cmd, len + 2);
- else
- memcpy(result, cmd, pos + 1);
- trimmed = trim(result);
- free(result);
- return trimmed;
- }*/
