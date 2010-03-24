@@ -32,8 +32,7 @@ void ls_ls(const char *_dir) {
 	int maxlen;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
 		stack_t *stack = malloc(sizeof(*stack));
-		int pos = 0;
-		const char **arr;
+		const char **arr, **parr;
 		openstack(stack);
 		/* push all the directory names onto a stack. */
 		{
@@ -51,14 +50,19 @@ void ls_ls(const char *_dir) {
 			}
 		}
 		maxlen = stack->size;
-		arr = malloc(sizeof(*arr) * maxlen);
+		arr = calloc(maxlen + 1, sizeof(*arr));
 		/* pop the stack onto a fixed size array. */
+		parr = arr;
 		while (stack->size > 0)
-			arr[pos++] = pop(stack);
+			*parr++ = pop(stack);
+		*parr = NULL;
 		/* sort and print the array */
 		qsort(arr, maxlen, sizeof(*arr), compare_chars);
-		for (pos = 0; pos < maxlen; pos++)
-			printf("%s\n", arr[pos]);
+		/* for (pos = 0; pos < maxlen; pos++)
+		 printf("%s\n", arr[pos]); */
+		parr = arr;
+		while (*parr != NULL)
+			printf("%s\n", *parr++);
 		/* cleanup after ourselves. */
 		closedir(d);
 		closestack(stack);
