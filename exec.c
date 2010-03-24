@@ -67,11 +67,6 @@ int exec(const char *cmd) {
 			realcmd[i] = '\0';
 	} else
 		realcmd = (char*) cmd;
-	printf("realcmd: \"%s\"\n", realcmd);
-	if (outputfile != NULL)
-		printf("outputfile: \"%s\"\n", outputfile);
-	if (inputfile != NULL)
-		printf("inputfile: \"%s\"\n", inputfile);
 	execiopipe(realcmd, inputfile, outputfile);
 	if (inputfile)
 		free(inputfile);
@@ -82,7 +77,8 @@ int exec(const char *cmd) {
 
 static int execiopipe(const char *cmd, const char *inputfile,
 		const char *outputfile) {
-	int res = 1000, fin, fout, childpid;
+	int res = 1000, childpid;
+	FILE *fin, *fout;
 	switch (childpid = fork()) {
 	case -1:
 		strerror(errno);
@@ -90,33 +86,27 @@ static int execiopipe(const char *cmd, const char *inputfile,
 		break;
 	case 0:
 		if (inputfile != NULL) {
-			if ((fin = open(inputfile, O_RDONLY)) == -1) {
+			if ((fin = freopen(inputfile, "r", stdin)) == NULL) {
 				strerror(errno);
-				res = errno;
 				_exit(errno);
 			}
-			close(0);
-			dup(fin);
 		}
 		if (outputfile != NULL) {
-			if ((fout = open(outputfile, O_WRONLY + O_CREAT, 0755)) == -1) {
+			if ((fout = freopen(outputfile, "a", stdout)) == NULL) {
 				strerror(errno);
-				res = errno;
 				_exit(errno);
 			}
-			close(1);
-			dup(fout);
 		}
 		res = execvp(parsecmd(cmd), parsetoargs(cmd));
-		if (inputfile != NULL)
-			close(fin);
-		if (outputfile != NULL)
-			close(fout);
+		if (fin)
+			fclose(fin);
+		if (fout)
+			fclose(fout);
 		exit(res);
 		break;
 	default:
 		waitpid(childpid, &res, 0);
-		printf("child returned: %d\n", res);
+		printf("process returned: %d\n", res);
 	}
 	return res;
 }
