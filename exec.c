@@ -79,6 +79,7 @@ static int execiopipe(const char *cmd, const char *inputfile,
 		const char *outputfile) {
 	int res = 1000, childpid;
 	FILE *fin, *fout;
+	char *execcmd, **cmdargs;
 	switch (childpid = fork()) {
 	case -1:
 		strerror(errno);
@@ -97,7 +98,21 @@ static int execiopipe(const char *cmd, const char *inputfile,
 				_exit(errno);
 			}
 		}
-		res = execvp(parsecmd(cmd), parsetoargs(cmd));
+		execcmd = parsecmd(cmd);
+		cmdargs = parsetoargs(cmd);
+		res = execvp(execcmd, cmdargs);
+		if (res == -1) {
+			char *err;
+			if ((err = strerror(errno)) == NULL)
+				fprintf(stderr, "%s: unknown error, errno: %d.\n", execcmd,
+						errno);
+			else
+				fprintf(stderr, "%s: %s\n", execcmd, err);
+		}
+		if (execcmd)
+			free(execcmd);
+		if (cmdargs)
+			free(cmdargs);
 		if (fin)
 			fclose(fin);
 		if (fout)
@@ -106,7 +121,7 @@ static int execiopipe(const char *cmd, const char *inputfile,
 		break;
 	default:
 		waitpid(childpid, &res, 0);
-		printf("process returned: %d\n", res);
+		break;
 	}
 	return res;
 }
@@ -262,12 +277,13 @@ static char** parsetoargs(const char *cmd) {
 		else if (!isspace(*pcmd) && lastwasspace) {
 			lastwasspace = 0;
 			arrlen++;
-		}
+		} else if (*cmd == '\\' && pcmd != cmd)
+			pcmd++;
 		pcmd++;
 	}
 	args = malloc(sizeof(*args) * arrlen);
 	len = strlen(cmd);
-	while (isspace(*(cmd + len - 1)))
+	while (isspace(*(cmd + len - 1)) && *(cmd + len - 2) != '\\')
 		len--;
 	if (len == 0) {
 		args[0] = malloc(1);
@@ -289,6 +305,8 @@ static char** parsetoargs(const char *cmd) {
 			args[argcount++][j] = '\0';
 		} else if (!lastwasspace && cmd[i] != ' ')
 			args[argcount][j++] = cmd[i];
+		else if (cmd[i] == '\\' && cmd[i + 1] != '0')
+			args[argcount][j++] = cmd[++i];
 	args[argcount][j] = '\0';
 	return args;
 }

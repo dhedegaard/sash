@@ -33,5 +33,6 @@ void parse(const char *input) {
 			cmd_cd(NULL);
 	else
 		cmd_exec(trimmed);
-	free(trimmed);
+	if (trimmed)
+		free(trimmed);
 }
