@@ -277,7 +277,7 @@ static char** parsetoargs(const char *cmd) {
 		else if (!isspace(*pcmd) && lastwasspace) {
 			lastwasspace = 0;
 			arrlen++;
-		} else if (*cmd == '\\' && pcmd != cmd)
+		} else if (*cmd == '\\' && *(cmd + 1) == ' ' && pcmd != cmd)
 			pcmd++;
 		pcmd++;
 	}
@@ -305,8 +305,10 @@ static char** parsetoargs(const char *cmd) {
 			args[argcount++][j] = '\0';
 		} else if (!lastwasspace && cmd[i] != ' ')
 			args[argcount][j++] = cmd[i];
-		else if (cmd[i] == '\\' && cmd[i + 1] != '0')
-			args[argcount][j++] = cmd[++i];
+		else if (cmd[i] == '\\' && cmd[i + 1] != ' ') {
+			args[argcount][j++] = ' ';
+			i++;
+		}
 	args[argcount][j] = '\0';
 	return args;
 }
