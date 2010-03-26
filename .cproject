@@ -33,6 +33,7 @@
 </option>
 <option id="gnu.c.compiler.option.warnings.pedantic.1937534891" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 <option id="gnu.c.compiler.option.misc.ansi.488159264" name="Support ANSI programs (-ansi)" superClass="gnu.c.compiler.option.misc.ansi" value="false" valueType="boolean"/>
+<option id="gnu.c.compiler.option.misc.other.124574939" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-inline" valueType="string"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1790565976" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.694535193" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">

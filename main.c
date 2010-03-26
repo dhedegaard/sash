@@ -42,7 +42,7 @@ int main(int argc, char **argv, char **env) {
 }
 
 static void setshellpath() {
-	char *pid, *newshell;
+	char *pid = NULL, *newshell = NULL;
 	pid = malloc(sizeof(*pid) * (PATH_MAX + 1));
 	if (snprintf(pid, PATH_MAX, "/proc/%d/exe", getpid()) <= 0) {
 		fprintf(stderr, "error: unable to get pid, in less than %d chars.\n",
@@ -91,6 +91,8 @@ static void setshellpath() {
 			fprintf(stderr,
 					"warning: Unable to set the shell for unknown reasons.\n");
 	}
-	free(pid);
-	free(newshell);
+	if (pid)
+		free(pid);
+	if (newshell)
+		free(newshell);
 }
