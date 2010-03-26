@@ -78,7 +78,7 @@ int exec(const char *cmd) {
 static int execiopipe(const char *cmd, const char *inputfile,
 		const char *outputfile) {
 	int res = 1000, childpid;
-	FILE *fin, *fout;
+	FILE *fin = NULL, *fout = NULL;
 	char *execcmd, **cmdargs;
 	switch (childpid = fork()) {
 	case -1:
