@@ -20,8 +20,7 @@ void parse(const char *input) {
 		if (trimmed)
 			free(trimmed);
 		cmd_quit();
-	}
-	else if (strcmp("help", trimmed) == 0)
+	} else if (strcmp("help", trimmed) == 0)
 		cmd_help();
 	else if (startswith(trimmed, "echo ") != 0) {
 		cmd_echo(removefirstword(trimmed));
@@ -34,7 +33,7 @@ void parse(const char *input) {
 			cmd_cd(removefirstword(trimmed));
 		else
 			cmd_cd(NULL);
-	else
+	else if (*trimmed != '\0')
 		cmd_exec(trimmed);
 	if (trimmed)
 		free(trimmed);
