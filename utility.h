@@ -37,10 +37,5 @@ char* removefirstword(const char *string);
  * Remember to free the result eventually, to avoid leaks.
  */
 char* getrelativepath(const char *path);
-/**
- * Does simple error handling for a specific path, in this case it's
- * based on the errno returned from chdir() and opendir().
- */
-void patherrorhandling(const char *path);
 
 #endif /* UTILITY_H_ */

@@ -11,6 +11,8 @@ internal commands:
 
 release 2:
 fork() and exec() all other statements.
+bugs:
+- parse escapes (\)
 
 release 3:
 batch files as args on startup,
@@ -26,3 +28,4 @@ support background execution using ampersand(&).
 
 release 6:
 change the prompt to show the current dir name.
+(should work)

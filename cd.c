@@ -5,8 +5,11 @@
  *      Author: Dennis Hedegaard
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
+#include <string.h>
 
 #include "utility.h"
 
@@ -21,7 +24,7 @@ void cd_cd(const char *dir) {
 		relativedir = getrelativepath(dir);
 	}
 	if (chdir(relativedir) != 0)
-		patherrorhandling(relativedir);
+		fprintf(stderr, "sash: cd: %s\n", strerror(errno));
 	if (shouldfree && relativedir != NULL)
 		free(relativedir);
 }

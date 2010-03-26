@@ -69,7 +69,8 @@ void ls_ls(const char *_dir) {
 		free(arr);
 		free(stack);
 	} else
-		patherrorhandling(_dir == NULL ? "." : _dir);
+		fprintf(stderr, "sash: %s: %s\n", _dir == NULL ? "." : _dir, strerror(
+				errno));
 }
 
 static int compare_chars(const void *a, const void *b) {
@@ -78,21 +79,22 @@ static int compare_chars(const void *a, const void *b) {
 }
 
 static void handle_readdir_err() {
-	switch (errno) {
-	case EOVERFLOW:
-		fprintf(stderr, "One of the values in the directory,"
-			" cannot be represented correctly.\n");
-		break;
-	case EBADF:
-		fprintf(stderr, "the directory stream is not open.\n");
-		break;
-	case ENOENT:
-		fprintf(stderr, "the current position in the directory"
-			"stream is invalid.\n");
-		break;
-	default:
-		fprintf(stderr, "an unknown error was encountered while"
-			" trying to get directories.\n");
-		break;
-	}
+	fprintf(stderr, "%s\n", strerror(errno));
+	/*switch (errno) {
+	 case EOVERFLOW:
+	 fprintf(stderr, "One of the values in the directory,"
+	 " cannot be represented correctly.\n");
+	 break;
+	 case EBADF:
+	 fprintf(stderr, "the directory stream is not open.\n");
+	 break;
+	 case ENOENT:
+	 fprintf(stderr, "the current position in the directory"
+	 "stream is invalid.\n");
+	 break;
+	 default:
+	 fprintf(stderr, "an unknown error was encountered while"
+	 " trying to get directories.\n");
+	 break;
+	 }*/
 }
