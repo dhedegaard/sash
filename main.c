@@ -50,36 +50,8 @@ static void setshellpath() {
 		exit(1);
 	}
 	newshell = malloc(sizeof(*newshell) * (PATH_MAX + 1));
-	if (readlink(pid, newshell, PATH_MAX) == -1) {
-		const char *err;
-		switch (errno) {
-		case EACCES:
-			err = "search or read permissions denied for path";
-			break;
-		case EINVAL:
-			err = "the path name is not a symlink";
-			break;
-		case EIO:
-			err = "an IO error occured for";
-			break;
-		case ELOOP:
-			err = "there's a loop in the symlink chain for";
-			break;
-		case ENAMETOOLONG:
-			err = "the path is too long";
-			break;
-		case ENOENT:
-			err = "the link does not exist";
-			break;
-		case ENOTDIR:
-			err = "a part of the path is not a directory";
-			break;
-		default:
-			err = "unknown error, unable to access";
-			break;
-		}
-		fprintf(stderr, "warning: %s: %s\n", err, pid);
-	}
+	if (readlink(pid, newshell, PATH_MAX) == -1)
+		fprintf(stderr, "setshellpath: %s\n", strerror(errno));
 	if (setenv("SHELL", newshell, 1) == -1) {
 		if (errno == EINVAL)
 			fprintf(stderr,

@@ -55,7 +55,7 @@ char* trim(const char *str) {
 	while (isspace(*strp))
 		strp--;
 	len = strp - str + 1;
-	result = calloc(sizeof(*result), len);
+	result = calloc(sizeof(*result), len + 1);
 	memcpy(result, str, len);
 	*(result + len) = '\0';
 	return result;
