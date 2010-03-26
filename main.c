@@ -20,7 +20,6 @@
 #include "prompt.h"
 #include "main.h"
 #include "command.h"
-#include "prompt.h"
 
 /**
  * Attemps to set the SHELL environmental variable, using
@@ -35,7 +34,7 @@ static void siginthandler();
 int main(int argc, char **argv, char **env) {
 	char input[LINE_MAX];
 	printf("sash shell revision: %d\n", 2);
-	signal(2, siginthandler);
+	signal(SIGINT, siginthandler);
 	setshellpath();
 	setenviron(env);
 	while (1) {
@@ -54,6 +53,7 @@ static void siginthandler() {
 	fflush(stdin);
 	printf("\n");
 	printprompt();
+	fflush(stdout);
 }
 
 static void setshellpath() {
