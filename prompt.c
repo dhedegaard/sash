@@ -45,9 +45,8 @@ void printprompt() {
 static int startswithhomedir(const char *dir) {
 	static char *home;
 	if (home == NULL)
-		home = getenv("HOME");
-	if (home == NULL)
-		return 0;
+		if ((home = getenv("HOME")) == NULL)
+			return 0;
 	if (startswith(dir, home))
 		return strlen(home);
 	else
