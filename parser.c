@@ -16,8 +16,11 @@ void parse(const char *input) {
 	char *trimmed = trim(input);
 	if (trimmed == NULL)
 		return;
-	if (strcmp("quit", trimmed) == 0 || strcmp("exit", trimmed) == 0)
+	if (strcmp("quit", trimmed) == 0 || strcmp("exit", trimmed) == 0) {
+		if (trimmed)
+			free(trimmed);
 		cmd_quit();
+	}
 	else if (strcmp("help", trimmed) == 0)
 		cmd_help();
 	else if (startswith(trimmed, "echo ") != 0) {

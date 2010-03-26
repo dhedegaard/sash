@@ -31,6 +31,7 @@ static char *_startwd;
 
 void setenviron(char **env) {
 	_envlen = 0;
+	_startwd = NULL;
 	_env = env;
 	while (env[_envlen] != NULL)
 		_envlen++;
@@ -77,5 +78,11 @@ static void setstartworkdir() {
 	len = strlen(tmp);
 	_startwd = malloc(len + 1);
 	memcpy(_startwd, tmp, len + 1);
-	free(tmp);
+	if (tmp)
+		free(tmp);
+}
+
+void environ_cleanup() {
+	if (_startwd)
+		free(_startwd);
 }

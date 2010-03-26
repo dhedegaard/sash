@@ -42,6 +42,7 @@ void cmd_help() {
 
 void cmd_quit() {
 	printf("Qutting..\n");
+	environ_cleanup();
 	exit(0);
 }
 

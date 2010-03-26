@@ -28,5 +28,9 @@ void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...));
  * chdir.
  */
 const char *getstartwd();
+/**
+ * Make sure to run this, for some heap cleanups.
+ */
+void environ_cleanup();
 
 #endif /* ENVIRON_H_ */

@@ -38,6 +38,7 @@ int main(int argc, char **argv, char **env) {
 		}
 		parse(input);
 	}
+	environ_cleanup();
 	return 0;
 }
 
@@ -49,9 +50,11 @@ static void setshellpath() {
 				PATH_MAX);
 		exit(1);
 	}
-	newshell = malloc(sizeof(*newshell) * (PATH_MAX + 1));
-	if (readlink(pid, newshell, PATH_MAX) == -1)
+	newshell = calloc(sizeof(*newshell), PATH_MAX + 1);
+	if (readlink(pid, newshell, PATH_MAX) == -1) {
 		fprintf(stderr, "setshellpath: %s\n", strerror(errno));
+		return;
+	}
 	if (setenv("SHELL", newshell, 1) == -1) {
 		if (errno == EINVAL)
 			fprintf(stderr,
