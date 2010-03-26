@@ -72,14 +72,12 @@ const char *getstartwd() {
 }
 
 static void setstartworkdir() {
-	char *tmp = malloc(PATH_MAX);
+	char tmp[PATH_MAX];
 	int len;
 	getcwd(tmp, PATH_MAX);
 	len = strlen(tmp);
 	_startwd = malloc(len + 1);
 	memcpy(_startwd, tmp, len + 1);
-	if (tmp)
-		free(tmp);
 }
 
 void environ_cleanup() {

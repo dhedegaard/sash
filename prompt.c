@@ -22,10 +22,10 @@
 static int startswithhomedir(const char *dir);
 
 void printprompt() {
-	char *cmd = NULL;
+	char cmd[PATH_MAX];
+	char *pcmd = cmd;
 	int cmdlen;
-	cmd = malloc(PATH_MAX);
-	if ((cmd = getcwd(cmd, PATH_MAX)) == NULL)
+	if ((pcmd = getcwd(pcmd, PATH_MAX)) == NULL)
 		fprintf(stderr, "%s\n", strerror(errno));
 	else {
 		int len;
@@ -40,8 +40,6 @@ void printprompt() {
 			printf("%s", cmd);
 	}
 	printf(" $ ");
-	if (cmd)
-		free(cmd);
 }
 
 static int startswithhomedir(const char *dir) {

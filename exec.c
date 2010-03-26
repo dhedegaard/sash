@@ -298,7 +298,7 @@ static char** parsetoargs(const char *cmd) {
 		if (lastwasspace && cmd[i] != ' ') {
 			lastwasspace = 0;
 			j = 0;
-			args[argcount] = malloc(len);
+			args[argcount] = malloc(len + 1);
 			args[argcount][j++] = cmd[i];
 		} else if (!lastwasspace && cmd[i] == ' ') {
 			lastwasspace = 1;

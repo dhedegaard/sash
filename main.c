@@ -12,34 +12,48 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <limits.h>
+#include <signal.h>
 
 #include "utility.h"
 #include "parser.h"
 #include "environ.h"
 #include "prompt.h"
 #include "main.h"
+#include "command.h"
+#include "prompt.h"
 
 /**
  * Attemps to set the SHELL environmental variable, using
  * getcwd() and setenv().
  */
 static void setshellpath();
+/**
+ * Handler for SIGINT's.
+ */
+static void siginthandler();
 
 int main(int argc, char **argv, char **env) {
 	char input[LINE_MAX];
 	printf("sash shell revision: %d\n", 1);
+	signal(2, siginthandler);
 	setshellpath();
 	setenviron(env);
 	while (1) {
 		printprompt();
 		if (fgets(input, LINE_MAX, stdin) == NULL) {
-			fprintf(stderr, "\nEOF caught, quitting.\n");
-			exit(1);
+			fprintf(stderr, "\nEOF caught.\n");
+			break;
 		}
 		parse(input);
 	}
-	environ_cleanup();
+	cmd_quit();
 	return 0;
+}
+
+static void siginthandler() {
+	fflush(stdin);
+	printf("\n");
+	printprompt();
 }
 
 static void setshellpath() {
