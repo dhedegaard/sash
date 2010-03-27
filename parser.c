@@ -240,6 +240,7 @@ static char *parsepipefromcmd(const char *cmd, char pipechar) {
 	while (*cmd != '\0') {
 		if (*cmd == pipechar) {
 			int len = 0;
+			cmd++;
 			while (isspace(*cmd) && *cmd != '\0')
 				cmd++;
 			if (*cmd == '\0')
