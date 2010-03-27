@@ -43,6 +43,5 @@ void cmd_echo(const char *str);
  * This happens if all else fails, it simply forks and execs with
  * the command specified.
  */
-void _cmd_exec(const char *cmd);
 void cmd_exec(arg_t *args);
 #endif /* COMMAND_H_ */

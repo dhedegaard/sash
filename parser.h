@@ -14,10 +14,15 @@
  * exec'ing etc, and a count of these.
  */
 typedef struct {
+	/* the full cmd. */
 	char *cmd;
+	/* inputfile parsed from cmd. */
 	char *inputfile;
+	/* outputfile parsed from cmd. */
 	char *outputfile;
+	/* count of args, without pipes. */
 	int argv_count;
+	/* args, without pipes, NULL terminated. */
 	char **argv;
 } arg_t;
 
