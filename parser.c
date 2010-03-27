@@ -18,17 +18,11 @@
  */
 static char** parsetoargs(const char *cmd);
 /**
- * Attempts to parse inputfile from a command with '<'.
- * Allocates on the heap, if an error occured or no file is
- * defined, NULL is returned.
+ * Parse both input and output pipes, the pipe is decided upon
+ * the pipechar supplied, '<' for input, and '>' for output.
+ * If an error occured or cmd is NULL, NULL is returned.
  */
-static char* parseinputfile(const char *cmd);
-/**
- * Attempt to parse outputfile from a command with '>'.
- * Allocates on the heap, if an error occured or no file is
- * defined, NULL is returned.
- */
-static char* parseoutputfile(const char *cmd);
+static char *parsepipefromcmd(const char *cmd, char pipechar);
 
 void parse(const char *input) {
 	arg_t *arg = parseargs(input);
@@ -74,7 +68,7 @@ void parse(const char *input) {
 		} else
 			cmd_cd(NULL);
 	else if (*arg->cmd != '\0')
-		cmd_exec(arg->cmd);
+		cmd_exec(arg);
 	if (arg)
 		closeargs(arg);
 }
@@ -93,12 +87,11 @@ arg_t *parseargs(const char *_input) {
 		memcpy(cmd, input, len);
 		cmd[len] = '\0';
 		arg->cmd = cmd;
-		/* free(cmd); */
 	}
 	/* parse argv (without pipes) */
 	{
 		const char *len = input;
-		char *toargs = NULL, **c = NULL;
+		char *toargs = NULL;
 		int last = 0;
 		while (1) {
 			char c = *len;
@@ -115,10 +108,7 @@ arg_t *parseargs(const char *_input) {
 		toargs = malloc(last + 1);
 		memcpy(toargs, input, last);
 		toargs[last] = '\0';
-		c = parsetoargs(toargs);
-		arg->argv = c;
-		/* if (c)
-		 free(c); */
+		arg->argv = parsetoargs(toargs);
 		free(toargs);
 	}
 	/* parse argv_count */
@@ -130,9 +120,9 @@ arg_t *parseargs(const char *_input) {
 		arg->argv_count = i;
 	}
 	/* parse inputfile */
-	arg->inputfile = parseinputfile(input);
+	arg->inputfile = parsepipefromcmd(input, '<');
 	/* parse outputfile */
-	arg->outputfile = parseoutputfile(input);
+	arg->outputfile = parsepipefromcmd(input, '>');
 	if (input)
 		free(input);
 	return arg;
@@ -142,11 +132,9 @@ int closeargs(arg_t *arg) {
 	if (arg == NULL)
 		return -1;
 	else {
-		int i = 0;
-		char **cp = NULL;
-		cp = arg->argv;
-		while (cp[i]) {
-			free(cp[i]);
+		char **cp = arg->argv;
+		while (*cp != NULL) {
+			free(*cp);
 			cp++;
 		}
 		if (arg->argv != NULL)
@@ -214,16 +202,17 @@ static char** parsetoargs(const char *cmd) {
 			pcmd++;
 		pcmd++;
 	}
-	args = calloc(sizeof(*args), arrlen);
 	len = strlen(cmd);
 	while (isspace(*(cmd + len - 1)) && *(cmd + len - 2) != '\\')
 		len--;
 	if (len == 0) {
+		args = malloc(sizeof(*args));
 		args[0] = malloc(1);
 		args[0][0] = '\0';
 		args[1] = NULL;
 		return args;
 	}
+	args = calloc(sizeof(*args), arrlen);
 	for (i = 0; i < arrlen; i++)
 		args[i] = NULL;
 	lastwasspace = 1;
@@ -246,10 +235,10 @@ static char** parsetoargs(const char *cmd) {
 	return args;
 }
 
-static char* parseinputfile(const char *cmd) {
-	char *inputfile = NULL;
+static char *parsepipefromcmd(const char *cmd, char pipechar) {
+	char *pipe = NULL;
 	while (*cmd != '\0') {
-		if (*cmd == '<') {
+		if (*cmd == pipechar) {
 			int len = 0;
 			while (isspace(*cmd) && *cmd != '\0')
 				cmd++;
@@ -260,36 +249,11 @@ static char* parseinputfile(const char *cmd) {
 				len++;
 			if (len == 0)
 				return NULL;
-			inputfile = malloc(len + 1);
-			memcpy(inputfile, cmd, len + 1);
-			inputfile[len] = '\0';
+			pipe = malloc(len + 1);
+			memcpy(pipe, cmd, len + 1);
+			pipe[len] = '\0';
 		}
 		cmd++;
 	}
-	return inputfile;
-}
-
-static char* parseoutputfile(const char *cmd) {
-	char *inputfile = NULL;
-	while (*cmd != '\0') {
-		if (*cmd == '>') {
-			int len = 0;
-			cmd++;
-			while (isspace(*cmd) && *cmd != '\0')
-				cmd++;
-			if (*cmd == '\0')
-				return NULL;
-			while (!isspace(*(cmd + len)) && *(cmd + len) != '\0' && *(cmd
-					+ len) != '<' && *(cmd + len) != '>')
-				len++;
-			if (len == 0)
-				return NULL;
-			inputfile = malloc(len + 1);
-			memcpy(inputfile, cmd, len + 1);
-			inputfile[len] = '\0';
-			break;
-		}
-		cmd++;
-	}
-	return inputfile;
+	return pipe;
 }

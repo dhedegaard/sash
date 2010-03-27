@@ -67,7 +67,6 @@ void cmd_echo(const char *str) {
 		printf("%s\n", str);
 }
 
-void cmd_exec(const char *cmd) {
-	exec(cmd);
+void cmd_exec(arg_t *args) {
+	exec(args);
 }
-

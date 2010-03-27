@@ -8,6 +8,8 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
+#include "parser.h"
+
 /**
  * Prints some help, this might include possible commands.
  */
@@ -41,6 +43,6 @@ void cmd_echo(const char *str);
  * This happens if all else fails, it simply forks and execs with
  * the command specified.
  */
-void cmd_exec(const char *cmd);
-
+void _cmd_exec(const char *cmd);
+void cmd_exec(arg_t *args);
 #endif /* COMMAND_H_ */

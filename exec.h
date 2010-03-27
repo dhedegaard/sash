@@ -8,9 +8,12 @@
 #ifndef EXEC_H_
 #define EXEC_H_
 
+#include "parser.h"
+
 /**
  * Parses and executes a command accordingly.
  */
-int exec(const char *cmd);
+/* int exec2(const char *cmd); */
+int exec(arg_t *args);
 
 #endif /* EXEC_H_ */
