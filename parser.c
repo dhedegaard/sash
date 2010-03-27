@@ -32,7 +32,7 @@ static char* parseoutputfile(const char *cmd);
 
 void parse(const char *input) {
 	arg_t *arg = parseargs(input);
-	if (arg->cmd == NULL || *arg->cmd == '\0') {
+	if (arg->cmd == NULL || *(arg->cmd) == '\0') {
 		if (arg)
 			closeargs(arg);
 		return;
@@ -81,7 +81,7 @@ void parse(const char *input) {
 
 arg_t *parseargs(const char *_input) {
 	arg_t *arg = malloc(sizeof(*arg));
-	const char *input = trim(_input);
+	char *input = trim(_input);
 	arg->argv = NULL;
 	arg->cmd = NULL;
 	arg->inputfile = NULL;
@@ -93,11 +93,12 @@ arg_t *parseargs(const char *_input) {
 		memcpy(cmd, input, len);
 		cmd[len] = '\0';
 		arg->cmd = cmd;
+		/* free(cmd); */
 	}
 	/* parse argv (without pipes) */
 	{
 		const char *len = input;
-		char *toargs = NULL;
+		char *toargs = NULL, **c = NULL;
 		int last = 0;
 		while (1) {
 			char c = *len;
@@ -114,7 +115,10 @@ arg_t *parseargs(const char *_input) {
 		toargs = malloc(last + 1);
 		memcpy(toargs, input, last);
 		toargs[last] = '\0';
-		arg->argv = parsetoargs(toargs);
+		c = parsetoargs(toargs);
+		arg->argv = c;
+		/* if (c)
+		 free(c); */
 		free(toargs);
 	}
 	/* parse argv_count */
@@ -129,25 +133,32 @@ arg_t *parseargs(const char *_input) {
 	arg->inputfile = parseinputfile(input);
 	/* parse outputfile */
 	arg->outputfile = parseoutputfile(input);
+	if (input)
+		free(input);
 	return arg;
 }
 
 int closeargs(arg_t *arg) {
-	char **c = NULL;
 	if (arg == NULL)
 		return -1;
-	if (arg->cmd)
-		free(arg->cmd);
-	if (arg->inputfile)
-		free(arg->inputfile);
-	if (arg->outputfile)
-		free(arg->outputfile);
-	c = arg->argv;
-	/*	while (c != NULL)
-	 if (c)
-	 free(c++);*/
-	if (arg)
+	else {
+		int i = 0;
+		char **cp = NULL;
+		cp = arg->argv;
+		while (cp[i]) {
+			free(cp[i]);
+			cp++;
+		}
+		if (arg->argv != NULL)
+			free(arg->argv);
+		if (arg->cmd != NULL)
+			free(arg->cmd);
+		if (arg->inputfile)
+			free(arg->inputfile);
+		if (arg->outputfile)
+			free(arg->outputfile);
 		free(arg);
+	}
 	return 0;
 }
 
@@ -185,8 +196,8 @@ int closeargs(arg_t *arg) {
  }
  */
 static char** parsetoargs(const char *cmd) {
-	char **args;
-	const char* pcmd;
+	char **args = NULL;
+	const char* pcmd = NULL;
 	int argcount = 0, i = 0, lastwasspace = 1, len, j = 0, arrlen = 1;
 	if (cmd == NULL)
 		return NULL;
@@ -236,7 +247,7 @@ static char** parsetoargs(const char *cmd) {
 }
 
 static char* parseinputfile(const char *cmd) {
-	char *inputfile;
+	char *inputfile = NULL;
 	while (*cmd != '\0') {
 		if (*cmd == '<') {
 			int len = 0;
@@ -259,7 +270,7 @@ static char* parseinputfile(const char *cmd) {
 }
 
 static char* parseoutputfile(const char *cmd) {
-	char *inputfile;
+	char *inputfile = NULL;
 	while (*cmd != '\0') {
 		if (*cmd == '>') {
 			int len = 0;
