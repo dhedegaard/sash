@@ -23,6 +23,19 @@ static char** parsetoargs(const char *cmd);
  * If an error occured or cmd is NULL, NULL is returned.
  */
 static char *parsepipefromcmd(const char *cmd, char pipechar);
+/**
+ * Parse a command to a arg_t struct, this struct makes
+ * it easy to use in command implementation.
+ * Everything's allocated on the heap.
+ * If an error occured, NULL is returned.
+ */
+static arg_t *parseargs(const char *input);
+/**
+ * Cleans up after the arg_t struct is ready to be freed
+ * from the heap.
+ * Returns 0 on success, -1 of error.
+ */
+static int closeargs(arg_t *arg);
 
 void parse(const char *input) {
 	arg_t *arg = parseargs(input);
@@ -73,7 +86,7 @@ void parse(const char *input) {
 		closeargs(arg);
 }
 
-arg_t *parseargs(const char *_input) {
+static arg_t *parseargs(const char *_input) {
 	arg_t *arg = malloc(sizeof(*arg));
 	char *input = trim(_input);
 	arg->argv = NULL;
@@ -114,10 +127,10 @@ arg_t *parseargs(const char *_input) {
 	/* parse argv_count */
 	{
 		int i = 0;
-		char **argcount = arg->argv;
-		for (i = 0; argcount[i] != NULL; i++)
+		char **argcount;
+		for (argcount = arg->argv; *argcount != NULL; i++, argcount++)
 			;
-		arg->argv_count = i;
+		arg->argc = i;
 	}
 	/* parse inputfile */
 	arg->inputfile = parsepipefromcmd(input, '<');
@@ -128,7 +141,7 @@ arg_t *parseargs(const char *_input) {
 	return arg;
 }
 
-int closeargs(arg_t *arg) {
+static int closeargs(arg_t *arg) {
 	if (arg == NULL)
 		return -1;
 	else {
