@@ -19,27 +19,27 @@ struct _node_t;
 typedef struct {
 	struct _node_t *top;
 	int size;
-} stack_t;
+} _stack_t;
 
 /**
  * Initializes values in the stack. This is required to avoid
  * weird behavior.
  */
-void openstack(stack_t *stack);
+void openstack(_stack_t *stack);
 /**
  * Makes sure to release all memory allocated by the stack, before
  * you free the stack (or an auto variable goes out of scope).
  */
-void closestack(stack_t *stack);
+void closestack(_stack_t *stack);
 /**
  * Pops a specific stack, if the stack is null or the stack is
  * empty, null is returned.
  */
-const char* pop(stack_t *stack);
+const char* pop(_stack_t *stack);
 /**
  * Pushes an object on top of the stack, if the stack is null,
  * 0 is returned, else 1 is returned.
  */
-int push(stack_t *stack, const char *element);
+int push(_stack_t *stack, const char *element);
 
 #endif /* STACK_H_ */

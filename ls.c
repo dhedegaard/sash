@@ -31,7 +31,7 @@ void ls_ls(const char *_dir) {
 	struct dirent *dir;
 	int maxlen;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
-		stack_t *stack = malloc(sizeof(*stack));
+		_stack_t *stack = malloc(sizeof(*stack));
 		const char **arr, **parr;
 		openstack(stack);
 		/* push all the directory names onto a stack. */

@@ -14,19 +14,19 @@ struct _node_t {
 	const char *element;
 };
 
-void openstack(stack_t *stack) {
+void openstack(_stack_t *stack) {
 	if (stack == NULL)
 		return;
 	stack->size = 0;
 	stack->top = NULL;
 }
 
-void closestack(stack_t *stack) {
+void closestack(_stack_t *stack) {
 	while (stack->size > 0)
 		pop(stack);
 }
 
-const char* pop(stack_t *stack) {
+const char* pop(_stack_t *stack) {
 	const char* _e;
 	struct _node_t *oldnode;
 	if (stack == NULL || stack->size == 0)
@@ -39,7 +39,7 @@ const char* pop(stack_t *stack) {
 	return _e;
 }
 
-int push(stack_t *stack, const char *element) {
+int push(_stack_t *stack, const char *element) {
 	struct _node_t *newnode;
 	if (stack == NULL)
 		return 0;
