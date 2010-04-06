@@ -8,6 +8,8 @@ internal commands:
 - echo <cmd>
 - help
 - quit
+- clear
+- clr
 
 release 2:
 fork() and exec() all other statements.

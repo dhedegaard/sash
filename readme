@@ -8,3 +8,5 @@ For now the commands are:
  - ls [dir]: lists files in a directory, if dir is not specified
              the current directory is listed.
  - dir [dir]: same as ls.
+ - clr/clear: clears the screen and puts it in the top left corner,
+             this does not work for all terminals.
