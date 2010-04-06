@@ -70,3 +70,7 @@ void cmd_echo(const char *str) {
 void cmd_exec(arg_t *args) {
 	exec(args);
 }
+
+void cmd_clear() {
+	printf("\033[2J\033[H");
+}

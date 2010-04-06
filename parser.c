@@ -80,6 +80,9 @@ void parse(const char *input) {
 			cmd_cd(cmd);
 		} else
 			cmd_cd(NULL);
+	else if (startswith(arg->cmd, "clr") != 0 || startswith(arg->cmd, "clear")
+			!= 0)
+		cmd_clear();
 	else if (*arg->cmd != '\0')
 		cmd_exec(arg);
 	if (arg)

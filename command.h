@@ -44,4 +44,10 @@ void cmd_echo(const char *str);
  * the command specified.
  */
 void cmd_exec(arg_t *args);
+/**
+ * Clears the screen and puts the cursor at the top left corner.
+ * The implementation is most likely the clear screen and move cursor
+ * to top left corner ANSI sequence.
+ */
+void cmd_clear();
 #endif /* COMMAND_H_ */
