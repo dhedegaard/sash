@@ -145,10 +145,11 @@ static int closeargs(arg_t *arg) {
 		return -1;
 	else {
 		char **cp = arg->argv;
-		while (*cp != NULL) {
-			free(*cp);
-			cp++;
-		}
+		if (cp)
+			while (cp != NULL && *cp != NULL) {
+				free(*cp);
+				cp++;
+			}
 		if (arg->argv != NULL)
 			free(arg->argv);
 		if (arg->cmd != NULL)
