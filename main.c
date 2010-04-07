@@ -66,7 +66,14 @@ static void setshellpath() {
 	}
 	newshell = calloc(sizeof(*newshell), PATH_MAX + 1);
 	if (readlink(pid, newshell, PATH_MAX) == -1) {
-		fprintf(stderr, "setshellpath: %s\n", strerror(errno));
+		if (errno == ENOENT)
+			fprintf(stderr, "unable to set the shell path variable.\n");
+		else
+			fprintf(stderr, "setshellpath: %s\n", strerror(errno));
+		if (pid)
+			free(pid);
+		if (newshell)
+			free(newshell);
 		return;
 	}
 	if (setenv("SHELL", newshell, 1) == -1) {
