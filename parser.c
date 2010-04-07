@@ -111,11 +111,7 @@ static arg_t *parseargs(const char *_input) {
 		int last = 0;
 		while (1) {
 			char c = *len;
-			if (c == '\0')
-				break;
-			else if (c == '<')
-				break;
-			else if (c == '>')
+			if (c == '\0' || c == '<' || c == '>')
 				break;
 			else
 				len++;
@@ -129,9 +125,11 @@ static arg_t *parseargs(const char *_input) {
 	}
 	/* parse argv_count */
 	{
-		char **argcount;
-		for (argcount = arg->argv; *argcount != NULL; argcount++)
-			;
+		char **argcount = arg->argv;
+		while (*argcount != NULL)
+			argcount++;
+		/* for (argcount = arg->argv; *argcount != NULL; argcount++)
+		 ; */
 		arg->argc = argcount - arg->argv;
 	}
 	/* parse inputfile */
@@ -149,7 +147,7 @@ static int closeargs(arg_t *arg) {
 	else {
 		char **cp = arg->argv;
 		if (cp)
-			while (cp != NULL && *cp != NULL) {
+			while (*cp != NULL) {
 				free(*cp);
 				cp++;
 			}
@@ -226,7 +224,7 @@ static char** parsetoargs(const char *cmd) {
 		args[1] = NULL;
 		return args;
 	}
-	args = calloc(sizeof(*args), arrlen);
+	args = calloc(sizeof(*args), arrlen + 1);
 	for (i = 0; i < arrlen; i++)
 		args[i] = NULL;
 	lastwasspace = 1;
