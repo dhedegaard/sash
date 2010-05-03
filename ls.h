@@ -16,6 +16,6 @@
  * linked list, calling qsort on the array, printing the strings and
  * the freeing the array again.
  */
-void ls_ls(const char *dir);
+void ls_ls(const char*);
 
 #endif /* LS_H_ */

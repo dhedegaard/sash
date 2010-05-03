@@ -14,6 +14,6 @@
  * Parses and executes a command accordingly.
  */
 /* int exec2(const char *cmd); */
-int exec(arg_t *args);
+int exec(arg_t*);
 
 #endif /* EXEC_H_ */

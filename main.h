@@ -8,6 +8,6 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-int main(int argc, char **argv, char **env);
+int main(int, char**, char**);
 
 #endif /* MAIN_H_ */

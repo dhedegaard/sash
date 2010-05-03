@@ -30,6 +30,6 @@ typedef struct {
  * Parses a string, anything is called from this method
  * and into the command part of the code.
  */
-void parse(const char *input);
+void parse(const char*);
 
 #endif /* PARSER_H_ */

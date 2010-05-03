@@ -24,12 +24,12 @@ void cmd_quit();
  * the error is handled internally.
  * If the change is succesfully, the PWD variable is changed.
  */
-void cmd_cd(const char *dir);
+void cmd_cd(const char*);
 /**
  * Attempts to list the contains in a directory, if no argument
  * is supplied (NULL), the current directory is listed.
  */
-void cmd_ls(const char *dir);
+void cmd_ls(const char*);
 /**
  * Lists all the environmental variables available on the system.
  */
@@ -38,12 +38,12 @@ void cmd_environ();
  * Does a simple echo of the text specified, if the text is NULL,
  * the function returns immediately.
  */
-void cmd_echo(const char *str);
+void cmd_echo(const char*);
 /**
  * This happens if all else fails, it simply forks and execs with
  * the command specified.
  */
-void cmd_exec(arg_t *args);
+void cmd_exec(arg_t*);
 /**
  * Clears the screen and puts the cursor at the top left corner.
  * The implementation is most likely the clear screen and move cursor

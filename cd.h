@@ -14,6 +14,6 @@
  * maximum path length is exceeded then it's handled
  * internally.
  */
-void cd_cd(const char *dir);
+void cd_cd(const char*);
 
 #endif /* CD_H_ */

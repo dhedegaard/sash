@@ -13,14 +13,14 @@
  * This function saves the length of the parameter as well
  * as holding a pointer to it in a file global scope.
  */
-void setenviron(char **env);
+void setenviron(char**);
 /**
  * Takes all environmental values and puts the through the
  * stream with a function like fprintf.
  * If setenviron() hasn't been run yet, this method prints a
  * warning with the function about needing to do so.
  */
-void getenviron(FILE* stream, int(*f)(FILE*, const char*, ...));
+void getenviron(FILE*, int(*)(FILE*, const char*, ...));
 /**
  * Takes the working dir as stored from the time where setenviron()
  * was run, this is nice for keeping the initial workdir in order.
