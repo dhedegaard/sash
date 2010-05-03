@@ -125,12 +125,11 @@ static arg_t *parseargs(const char *_input) {
 	}
 	/* parse argv_count */
 	{
+		int count = 0;
 		char **argcount = arg->argv;
-		while (*argcount != NULL)
-			argcount++;
-		/* for (argcount = arg->argv; *argcount != NULL; argcount++)
-		 ; */
-		arg->argc = argcount - arg->argv;
+		while (*(argcount++) != NULL)
+			count++;
+		arg->argc = count;
 	}
 	/* parse inputfile */
 	arg->inputfile = parsepipefromcmd(input, '<');
@@ -224,7 +223,7 @@ static char** parsetoargs(const char *cmd) {
 		args[1] = NULL;
 		return args;
 	}
-	args = calloc(sizeof(*args), arrlen + 1);
+	args = calloc(sizeof(*args), arrlen + 2);
 	for (i = 0; i < arrlen; i++)
 		args[i] = NULL;
 	lastwasspace = 1;
@@ -244,6 +243,7 @@ static char** parsetoargs(const char *cmd) {
 			i++;
 		}
 	args[argcount][j] = '\0';
+	args[++argcount] = NULL;
 	return args;
 }
 

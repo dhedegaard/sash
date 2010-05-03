@@ -34,8 +34,9 @@ void closestack(_stack_t *stack);
 /**
  * Pops a specific stack, if the stack is null or the stack is
  * empty, null is returned.
+ * Remember to free the output.
  */
-const char* pop(_stack_t *stack);
+char* pop(_stack_t *stack);
 /**
  * Pushes an object on top of the stack, if the stack is null,
  * 0 is returned, else 1 is returned.
