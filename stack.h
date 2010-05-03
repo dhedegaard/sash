@@ -17,7 +17,6 @@
  * The implementation of the stack struct is supposed hidden,
  * so please use the functions for all your stack business.
  */
-struct _node_t;
 struct _stack_t;
 
 /**
