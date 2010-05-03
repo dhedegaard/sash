@@ -39,6 +39,8 @@ const char* pop(_stack_t *stack);
 /**
  * Pushes an object on top of the stack, if the stack is null,
  * 0 is returned, else 1 is returned.
+ * The element is copied onto the struct, by using the char[1]
+ * struct hack.
  */
 int push(_stack_t *stack, const char *element);
 
