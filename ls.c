@@ -31,9 +31,9 @@ void ls_ls(const char *_dir) {
 	struct dirent *dir;
 	int maxlen;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
-		_stack_t *stack = malloc(sizeof(*stack));
+		struct _stack_t *stack;
 		const char **arr, **parr;
-		openstack(stack);
+		stack = openstack(stack);
 		/* push all the directory names onto a stack. */
 		{
 			int olderr = errno;
@@ -42,18 +42,16 @@ void ls_ls(const char *_dir) {
 			if (errno != olderr) {
 				handle_readdir_err();
 				closedir(d);
-				if (stack != NULL) {
+				if (stack != NULL)
 					closestack(stack);
-					free(stack);
-				}
 				return;
 			}
 		}
-		maxlen = stack->size;
+		maxlen = stack_size(stack);
 		arr = calloc(maxlen + 1, sizeof(*arr));
 		/* pop the stack onto a fixed size array. */
 		parr = arr;
-		while (stack->size > 0)
+		while (stack_size(stack) > 0)
 			*parr++ = pop(stack);
 		*parr = NULL;
 		/* sort and print the array */
@@ -67,7 +65,6 @@ void ls_ls(const char *_dir) {
 		closedir(d);
 		closestack(stack);
 		free(arr);
-		free(stack);
 	} else
 		fprintf(stderr, "sash: %s: %s\n", _dir == NULL ? "." : _dir, strerror(
 				errno));

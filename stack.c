@@ -10,24 +10,30 @@
 
 #include "stack.h"
 
+struct _stack_t {
+	struct _node_t *top;
+	int size;
+};
+
 struct _node_t {
 	struct _node_t *next;
 	char element[255];
 };
 
-void openstack(_stack_t *stack) {
-	if (stack == NULL)
-		return;
+struct _stack_t* openstack() {
+	struct _stack_t *stack = malloc(sizeof(*stack));
 	stack->size = 0;
 	stack->top = NULL;
+	return stack;
 }
 
-void closestack(_stack_t *stack) {
+void closestack(struct _stack_t *stack) {
 	while (stack->size > 0)
 		pop(stack);
+	free(stack);
 }
 
-char* pop(_stack_t *stack) {
+char* pop(struct _stack_t *stack) {
 	char* _e;
 	struct _node_t *oldnode;
 	if (stack == NULL || stack->size == 0)
@@ -41,7 +47,7 @@ char* pop(_stack_t *stack) {
 	return _e;
 }
 
-int push(_stack_t *stack, const char *element) {
+int push(struct _stack_t *stack, const char *element) {
 	struct _node_t *newnode;
 	int size = sizeof(*newnode) - 255 + 1 + strlen(element);
 	if (stack == NULL)
@@ -52,4 +58,10 @@ int push(_stack_t *stack, const char *element) {
 	stack->top = newnode;
 	stack->size++;
 	return 1;
+}
+
+inline int stack_size(struct _stack_t *s) {
+	if (s == NULL)
+		return -1;
+	return s->size;
 }
