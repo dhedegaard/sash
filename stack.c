@@ -6,12 +6,13 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "stack.h"
 
 struct _node_t {
 	struct _node_t *next;
-	const char *element;
+	char element[1];
 };
 
 void openstack(_stack_t *stack) {
@@ -43,8 +44,8 @@ int push(_stack_t *stack, const char *element) {
 	struct _node_t *newnode;
 	if (stack == NULL)
 		return 0;
-	newnode = malloc(sizeof(*newnode));
-	newnode->element = element;
+	newnode = malloc(sizeof(*newnode) + strlen(element));
+	strcpy(newnode->element, element);
 	newnode->next = stack->top;
 	stack->top = newnode;
 	stack->size = stack->size + 1;
