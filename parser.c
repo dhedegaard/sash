@@ -70,7 +70,8 @@ void parse(const char *input) {
 			cmd_ls(NULL);
 		else
 			cmd_ls(cmd);
-	} else if (startswith(arg->cmd, "cd") != 0)
+	} else if (startswith(arg->cmd, "cd") != 0 && ((strlen(arg->cmd) > 2
+			&& arg->cmd[2] == ' ') || strlen(arg->cmd) == 2))
 		if (strchr(arg->cmd, ' ') != NULL) {
 			char *cmd = arg->cmd;
 			while (!isspace(*cmd) && *cmd != '\0')
