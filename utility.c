@@ -102,10 +102,14 @@ char* getrelativepath(const char *dir) {
 	if (dir == NULL)
 		return NULL;
 	len = strlen(dir);
-	newpath = malloc(sizeof(newpath) * PATH_MAX);
-	if (len > 0 && dir[0] == '~')
+	if (len > 0 && dir[0] == '~') {
+		char *home = getenv("HOME");
+		int homelen = strlen(home);
+		newpath = malloc(len + homelen + 1);
 		sprintf(newpath, "%s%s", getenv("HOME"), dir + 1);
-	else
+	} else {
+		newpath = malloc(len + 1);
 		sprintf(newpath, "%s", dir);
+	}
 	return newpath;
 }

@@ -110,13 +110,9 @@ static arg_t *parseargs(const char *_input) {
 		const char *len = input;
 		char *toargs = NULL;
 		int last = 0;
-		while (1) {
-			char c = *len;
-			if (c == '\0' || c == '<' || c == '>')
-				break;
-			else
-				len++;
-		}
+		char c;
+		while ((c = *len) != '\0' && c != '<' && c != '>')
+			len++;
 		last = len - input;
 		toargs = malloc(last + 1);
 		memcpy(toargs, input, last);
@@ -200,17 +196,17 @@ static int closeargs(arg_t *arg) {
 static char** parsetoargs(const char *cmd) {
 	char **args = NULL;
 	const char* pcmd = NULL;
-	int argcount = 0, i = 0, lastwasspace = 1, len, j = 0, arrlen = 1;
+	int argcount = 0, i = 0, lastwasspace = 1, len, j = 0, arrlen = 0;
 	if (cmd == NULL)
 		return NULL;
 	pcmd = cmd;
-	while (*pcmd != '\0' && *pcmd != '<' && *pcmd == '>') {
+	while (*pcmd != '\0' && *pcmd != '<' && *pcmd != '>') {
 		if (isspace(*pcmd) && !lastwasspace)
 			lastwasspace = 1;
 		else if (!isspace(*pcmd) && lastwasspace) {
 			lastwasspace = 0;
 			arrlen++;
-		} else if (*cmd == '\\' && *(cmd + 1) == ' ' && pcmd != cmd)
+		} else if (*pcmd == '\\' && *(pcmd + 1) == ' ' && pcmd != cmd)
 			pcmd++;
 		pcmd++;
 	}
