@@ -110,8 +110,7 @@ static arg_t *parseargs(const char *_input) {
 		const char *len = input;
 		char *toargs = NULL;
 		int last = 0;
-		char c;
-		while ((c = *len) != '\0' && c != '<' && c != '>')
+		while (*len != '\0' && *len != '<' && *len != '>')
 			len++;
 		last = len - input;
 		toargs = malloc(last + 1);
