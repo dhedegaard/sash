@@ -32,7 +32,7 @@ void ls_ls(const char *_dir) {
 	int maxlen;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
 		struct _stack_t *stack;
-		const char **arr, **parr;
+		char **arr, **parr;
 		stack = openstack(stack);
 		/* push all the directory names onto a stack. */
 		{
@@ -59,8 +59,10 @@ void ls_ls(const char *_dir) {
 		/* for (pos = 0; pos < maxlen; pos++)
 		 printf("%s\n", arr[pos]); */
 		parr = arr;
-		while (*parr != NULL)
-			printf("%s\n", *parr++);
+		while (*parr != NULL) {
+			printf("%s\n", *parr);
+			free(*parr++);
+		}
 		/* cleanup after ourselves. */
 		closedir(d);
 		closestack(stack);
