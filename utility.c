@@ -97,8 +97,8 @@ char* removefirstword(const char *string) {
 }
 
 char* getrelativepath(const char *dir) {
-	char *newpath;
-	int len;
+	char *newpath = NULL;
+	int len = 0;
 	if (dir == NULL)
 		return NULL;
 	len = strlen(dir);
@@ -106,10 +106,13 @@ char* getrelativepath(const char *dir) {
 		char *home = getenv("HOME");
 		int homelen = strlen(home);
 		newpath = malloc(len + homelen + 1);
-		sprintf(newpath, "%s%s", getenv("HOME"), dir + 1);
+		snprintf(newpath, homelen + len, "%s%s", home, dir + 1);
+		*(newpath + homelen + len) = '\0';
+
 	} else {
 		newpath = malloc(len + 1);
-		sprintf(newpath, "%s", dir);
+		snprintf(newpath, len + 1, "%s", dir);
+		*(newpath + len) = '\0';
 	}
 	return newpath;
 }

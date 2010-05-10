@@ -24,7 +24,7 @@ void cd_cd(const char *dir) {
 		relativedir = getrelativepath(dir);
 	}
 	if (chdir(relativedir) != 0)
-		fprintf(stderr, "sash: cd: %s\n", strerror(errno));
+		fprintf(stderr, "sash: cd: %s: %s\n", strerror(errno), dir);
 	if (shouldfree && relativedir != NULL)
 		free(relativedir);
 }
