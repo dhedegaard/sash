@@ -17,9 +17,9 @@
 #include "exec.h"
 
 void cmd_help() {
-	char *helpfile = malloc(sizeof(*helpfile) * PATH_MAX);
+	char *helpfile = malloc(PATH_MAX);
 	FILE *f;
-	if (sprintf(helpfile, "%s/readme", getstartwd()) < 0) {
+	if (snprintf(helpfile, PATH_MAX, "%s/readme", getstartwd()) < 0) {
 		fprintf(stderr, "command.c:sprintf(): error writing to buffer.\n");
 		exit(1);
 	}

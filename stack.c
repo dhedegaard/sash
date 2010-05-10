@@ -36,10 +36,13 @@ void closestack(struct _stack_t *stack) {
 char* pop(struct _stack_t *stack) {
 	char* _e;
 	struct _node_t *oldnode;
+	int len = -1;
 	if (stack == NULL || stack->size == 0)
 		return NULL;
-	_e = malloc(strlen(stack->top->element) + 1);
-	strcpy(_e, stack->top->element);
+	len = strlen(stack->top->element);
+	_e = malloc(len + 1);
+	strncpy(_e, stack->top->element, len);
+	*(_e + len) = '\0';
 	oldnode = stack->top;
 	stack->top = stack->top->next;
 	free(oldnode);
