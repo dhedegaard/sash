@@ -52,11 +52,12 @@ char* pop(struct _stack_t *stack) {
 
 int push(struct _stack_t *stack, const char *element) {
 	struct _node_t *newnode;
-	int size = sizeof(*newnode) - 255 + 1 + strlen(element);
+	int size = strlen(element) + 1;
 	if (stack == NULL)
 		return 0;
-	newnode = malloc(size);
-	strcpy(newnode->element, element);
+	newnode = malloc(sizeof(*newnode) - 255 + size);
+	strncpy(newnode->element, element, size - 1);
+	*(newnode->element + size - 1) = '\0';
 	newnode->next = stack->top;
 	stack->top = newnode;
 	stack->size++;
