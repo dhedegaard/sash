@@ -108,7 +108,6 @@ char* getrelativepath(const char *dir) {
 		newpath = malloc(len + homelen + 1);
 		snprintf(newpath, homelen + len, "%s%s", home, dir + 1);
 		*(newpath + homelen + len) = '\0';
-
 	} else {
 		newpath = malloc(len + 1);
 		snprintf(newpath, len + 1, "%s", dir);
