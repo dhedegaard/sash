@@ -98,7 +98,7 @@ static arg_t *parseargs(const char *_input) {
 	arg->inputfile = NULL;
 	arg->outputfile = NULL;
 	arg->argc = 0;
-	arg->background = 0; /* TODO: parse background. */
+	arg->background = 0;
 	/* parse cmd */
 	arg->cmd = malloc(strlen(input) + 1);
 	strcpy(arg->cmd, input);
@@ -107,8 +107,9 @@ static arg_t *parseargs(const char *_input) {
 		const char *len = input;
 		char *toargs = NULL;
 		int last = 0;
-		while (*len != '\0' && *len != '<' && *len != '>')
+		while (*len != '\0' && *len != '<' && *len != '>' && *len != '&')
 			len++;
+		arg->background = *len == '&';
 		last = len - input;
 		toargs = malloc(last + 1);
 		memcpy(toargs, input, last);
@@ -196,7 +197,7 @@ static char** parsetoargs(const char *cmd) {
 	if (cmd == NULL)
 		return NULL;
 	pcmd = cmd;
-	while (*pcmd != '\0' && *pcmd != '<' && *pcmd != '>') {
+	while (*pcmd != '\0' && *pcmd != '<' && *pcmd != '>' && *pcmd != '&') {
 		if (isspace(*pcmd) && !lastwasspace)
 			lastwasspace = 1;
 		else if (!isspace(*pcmd) && lastwasspace) {

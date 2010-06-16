@@ -60,7 +60,8 @@ static int execiopipe(arg_t *args) {
 		exit(res);
 		break;
 	default:
-		waitpid(childpid, &res, 0);
+		if (!args->background)
+			waitpid(childpid, &res, 0);
 		break;
 	}
 	return res;
