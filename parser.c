@@ -97,15 +97,11 @@ static arg_t *parseargs(const char *_input) {
 	arg->cmd = NULL;
 	arg->inputfile = NULL;
 	arg->outputfile = NULL;
+	arg->argc = 0;
 	arg->background = 0; /* TODO: parse background. */
 	/* parse cmd */
-	{
-		int len = strlen(input);
-		char *cmd = malloc(len + 1);
-		memcpy(cmd, input, len);
-		cmd[len] = '\0';
-		arg->cmd = cmd;
-	}
+	arg->cmd = malloc(strlen(input) + 1);
+	strcpy(arg->cmd, input);
 	/* parse argv (without pipes) */
 	{
 		const char *len = input;
