@@ -97,6 +97,7 @@ static arg_t *parseargs(const char *_input) {
 	arg->cmd = NULL;
 	arg->inputfile = NULL;
 	arg->outputfile = NULL;
+	arg->background = 0; /* TODO: parse background. */
 	/* parse cmd */
 	{
 		int len = strlen(input);
@@ -214,9 +215,9 @@ static char** parsetoargs(const char *cmd) {
 		len--;
 	if (len == 0) {
 		args = malloc(sizeof(*args));
-		args[0] = malloc(1);
-		args[0][0] = '\0';
-		args[1] = NULL;
+		*args = malloc(2);
+		**args = '\0';
+		*(args + 1) = NULL;
 		return args;
 	}
 	args = calloc(sizeof(*args), arrlen + 2);

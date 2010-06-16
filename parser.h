@@ -24,6 +24,8 @@ typedef struct {
 	int argc;
 	/* args, without pipes, NULL terminated. */
 	char **argv;
+	/* if the command should go to background, or not. */
+	int background;
 } arg_t;
 
 /**
