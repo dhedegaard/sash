@@ -11,40 +11,15 @@
 
 #include "utility.h"
 #include "command.h"
+#include "queue.h"
 #include "parser.h"
 
-/**
- * A simple repressentation of an argument, from a commandline.
- * Should work like a queue in the parser_t struct.
- */
-struct arg {
-	/**
-	 * The next node after this one, if one exists. Should be NULL
-	 * if there's no next.
-	 */
-	struct arg* next;
-	/**
-	 * The argument contained in the arg struct.
-	 */
-	char* argv;
-};
 /**
  * An internal parser type, used for parsing a command, then
  * this struct should be made into an argt_t struct.
  */
 struct parser_t {
-	/**
-	 * The front of the queue.
-	 */
-	struct arg* front;
-	/**
-	 * The back of the queue.
-	 */
-	struct arg* back;
-	/**
-	 * The size of the queue.
-	 */
-	int queue_size;
+	struct queue_t* queue;
 	/**
 	 * Is there an ampersand ?
 	 */
@@ -60,24 +35,24 @@ struct parser_t {
 	/**
 	 * If inPipe != 0, where should input be directed.
 	 */
-	char* inPipeFile;
+	const char* inPipeFile;
 	/**
 	 * If outPipe != null, where should output be directed.
 	 */
-	char* outPipeFile;
+	const char* outPipeFile;
 };
 
 /**
  * Remeber to free the parser_t after use, since it's allocated
  * on the heap.
  */
-static struct parser_t* createParser_t();
+static struct parser_t* parser_t_create();
 
 /**
  * Frees a parser_t, including a queue, if there's any, as well
  * as inPipeFile and outPipeFile.
  */
-static int destroyParser_t(struct parser_t*);
+static int parser_t_destroy(struct parser_t*);
 
 /**
  * Parses a cmd to args,
@@ -101,18 +76,18 @@ static struct arg_t *parseargs(const char *input);
  * from the heap.
  * Returns 0 on success, -1 of error.
  */
-static int destroyArg_t(struct arg_t *arg);
+static int arg_t_destroy(struct arg_t *arg);
 
 void parse(const char *input) {
 	struct arg_t *arg = parseargs(input);
 	if (arg->cmd == NULL || *(arg->cmd) == '\0') {
 		if (arg)
-			destroyArg_t(arg);
+			arg_t_destroy(arg);
 		return;
 	}
 	if (strcmp("quit", arg->cmd) == 0 || strcmp("exit", arg->cmd) == 0) {
 		if (arg)
-			destroyArg_t(arg);
+			arg_t_destroy(arg);
 		cmd_quit();
 	} else if (strcmp("help", arg->cmd) == 0)
 		cmd_help();
@@ -153,7 +128,7 @@ void parse(const char *input) {
 	else if (*arg->cmd != '\0')
 		cmd_exec(arg);
 	if (arg)
-		destroyArg_t(arg);
+		arg_t_destroy(arg);
 }
 
 static struct arg_t *parseargs(const char *_input) {
@@ -200,7 +175,7 @@ static struct arg_t *parseargs(const char *_input) {
 	return arg;
 }
 
-static int destroyArg_t(struct arg_t *arg) {
+static int arg_t_destroy(struct arg_t *arg) {
 	if (arg == NULL)
 		return -1;
 	else {
@@ -331,32 +306,27 @@ static char *parsepipefromcmd(const char *cmd, char pipechar) {
 	return pipe;
 }
 
-static struct parser_t* createParser_t() {
+static struct parser_t* parser_t_create() {
 	struct parser_t* p = malloc(sizeof(*p));
 	/* null pointers. */
-	p->back = NULL;
-	p->front = NULL;
 	p->inPipeFile = NULL;
 	p->outPipeFile = NULL;
+	p->queue = queue_open();
 	/* integer initialization */
 	p->background = 0;
 	p->inPipe = 0;
 	p->outPipe = 0;
-	p->queue_size = 0;
 	return p;
 }
 
-static int destroyParser_t(struct parser_t* p) {
+static int parser_t_destroy(struct parser_t* p) {
 	if (!p)
 		return 0;
 	if (p->inPipeFile)
 		free(p->inPipeFile);
 	if (p->outPipeFile)
 		free(p->outPipeFile);
-	while (p->front) {
-		struct arg* a = p->front;
-		p->front = p->front->next;
-		free(a);
-	}
+	if (p->queue)
+		queue_close(p->queue);
 	return 1;
 }

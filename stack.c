@@ -11,12 +11,12 @@
 #include "stack.h"
 
 struct _stack_t {
-	struct _node_t *top;
+	struct stack_node_t *top;
 	int size;
 };
 
-struct _node_t {
-	struct _node_t *next;
+struct stack_node_t {
+	struct stack_node_t *next;
 	char element[255];
 };
 
@@ -35,7 +35,7 @@ void closestack(struct _stack_t *stack) {
 
 char* pop(struct _stack_t *stack) {
 	char* _e;
-	struct _node_t *oldnode;
+	struct stack_node_t *oldnode;
 	int len = -1;
 	if (stack == NULL || stack->size == 0)
 		return NULL;
@@ -46,12 +46,12 @@ char* pop(struct _stack_t *stack) {
 	oldnode = stack->top;
 	stack->top = stack->top->next;
 	free(oldnode);
-	stack->size = stack->size - 1;
+	stack->size--;
 	return _e;
 }
 
 int push(struct _stack_t *stack, const char *element) {
-	struct _node_t *newnode;
+	struct stack_node_t *newnode;
 	int size = strlen(element) + 1;
 	if (stack == NULL)
 		return 0;
