@@ -32,5 +32,7 @@ check_function_exists(closedir HAVE_CLOSEDIR)
 check_function_exists(freopen HAVE_FREOPEN)
 check_function_exists(fopen HAVE_FOPEN)
 check_function_exists(fclose HAVE_FCLOSE)
-add_executable(sash main.c main.h command.c command.h parser.c parser.h utility.c utility.h environ.c environ.h ls.c ls.h cd.c cd.h stack.c stack.h prompt.c prompt.h exec.c exec.h)
+add_executable(sash main.c main.h command.c command.h parser.c parser.h
+	utility.c utility.h environ.c environ.h ls.c ls.h cd.c cd.h stack.c
+	stack.h queue.h queue.c prompt.c prompt.h exec.c exec.h)
 install (TARGETS sash DESTINATION bin)
