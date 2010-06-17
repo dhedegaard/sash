@@ -10,6 +10,12 @@
 
 #include "queue.h"
 
+/**
+ * Declaration for a struct, with an internal representation
+ * of a node in a single-linked queue.
+ */
+struct queue_node_t;
+
 struct queue_t {
 	int size;
 	struct queue_node_t *front;
@@ -34,14 +40,29 @@ int queue_close(struct queue_t *q) {
 		return 0;
 	while (q->front) {
 		struct queue_node_t *n = q->front;
-		q->front = q->front->next;
+		q->front = n->next;
 		free(n);
 	}
 	return 1;
 }
 
 int queue_enqueue(struct queue_t *q, const char *str) {
-
+	struct queue_node_t *n = NULL;
+	int size = 0;
+	if (!q)
+		return 0;
+	size = strlen(str) + 1;
+	n = malloc(sizeof(*n) - 255 + size);
+	n->next = NULL;
+	strncpy(n->e, str, size - 1);
+	*(n->e + size - 1) = '\0';
+	if (q->back)
+		q->back->next = n;
+	q->back = n;
+	if (!q->front)
+		q->front = n;
+	q->size++;
+	return 1;
 }
 
 char*queue_poll(struct queue_t *q) {
@@ -61,6 +82,6 @@ char*queue_poll(struct queue_t *q) {
 	return e;
 }
 
-int queue_size(struct queue_t *q) {
+inline int queue_size(struct queue_t *q) {
 	return q ? q->size : -1;
 }

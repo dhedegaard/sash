@@ -44,7 +44,7 @@ char* pop(struct _stack_t *stack) {
 	strncpy(_e, stack->top->element, len);
 	*(_e + len) = '\0';
 	oldnode = stack->top;
-	stack->top = stack->top->next;
+	stack->top = oldnode->next;
 	free(oldnode);
 	stack->size--;
 	return _e;

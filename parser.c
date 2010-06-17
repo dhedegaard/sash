@@ -35,11 +35,11 @@ struct parser_t {
 	/**
 	 * If inPipe != 0, where should input be directed.
 	 */
-	const char* inPipeFile;
+	char* inPipeFile;
 	/**
 	 * If outPipe != null, where should output be directed.
 	 */
-	const char* outPipeFile;
+	char* outPipeFile;
 };
 
 /**
