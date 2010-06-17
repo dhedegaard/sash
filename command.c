@@ -61,13 +61,14 @@ void cmd_environ() {
 }
 
 void cmd_echo(const char *str) {
+	fprintf(stderr, "using deprecated function cmd_echo(const char*)");
 	if (str == NULL)
 		fprintf(stderr, "echo: not arguments supplied.\n");
 	else
 		printf("%s\n", str);
 }
 
-void cmd_exec(arg_t *args) {
+void cmd_exec(struct arg_t *args) {
 	exec(args);
 }
 

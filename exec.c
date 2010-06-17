@@ -16,14 +16,14 @@
 
 #include "exec.h"
 
-static int execiopipe(arg_t *args);
+static int execiopipe(struct arg_t *args);
 
-int exec(arg_t *args) {
+int exec(struct arg_t *args) {
 	execiopipe(args);
 	return 0;
 }
 
-static int execiopipe(arg_t *args) {
+static int execiopipe(struct arg_t *args) {
 	int res = 0, childpid;
 	FILE *fin = NULL, *fout = NULL;
 	switch (childpid = fork()) {

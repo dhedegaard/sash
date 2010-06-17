@@ -27,6 +27,7 @@ this includes ls, environ, echo and help.
 
 release 5:
 support background execution using ampersand(&).
+(works for exec)
 
 release 6:
 change the prompt to show the current dir name.

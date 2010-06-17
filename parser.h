@@ -13,7 +13,7 @@
  * inputfile, an optional outputfile, an array of args for
  * exec'ing etc, and a count of these.
  */
-typedef struct {
+struct arg_t {
 	/* the full cmd. */
 	char *cmd;
 	/* inputfile parsed from cmd. */
@@ -26,7 +26,7 @@ typedef struct {
 	char **argv;
 	/* if the command should go to background, or not. */
 	int background;
-} arg_t;
+};
 
 /**
  * Parses a string, anything is called from this method

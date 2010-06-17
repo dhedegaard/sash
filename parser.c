@@ -29,16 +29,16 @@ static char *parsepipefromcmd(const char *cmd, char pipechar);
  * Everything's allocated on the heap.
  * If an error occured, NULL is returned.
  */
-static arg_t *parseargs(const char *input);
+static struct arg_t *parseargs(const char *input);
 /**
  * Cleans up after the arg_t struct is ready to be freed
  * from the heap.
  * Returns 0 on success, -1 of error.
  */
-static int closeargs(arg_t *arg);
+static int closeargs(struct arg_t *arg);
 
 void parse(const char *input) {
-	arg_t *arg = parseargs(input);
+	struct arg_t *arg = parseargs(input);
 	if (arg->cmd == NULL || *(arg->cmd) == '\0') {
 		if (arg)
 			closeargs(arg);
@@ -90,8 +90,8 @@ void parse(const char *input) {
 		closeargs(arg);
 }
 
-static arg_t *parseargs(const char *_input) {
-	arg_t *arg = malloc(sizeof(*arg));
+static struct arg_t *parseargs(const char *_input) {
+	struct arg_t *arg = malloc(sizeof(*arg));
 	char *input = trim(_input);
 	arg->argv = NULL;
 	arg->cmd = NULL;
@@ -134,7 +134,7 @@ static arg_t *parseargs(const char *_input) {
 	return arg;
 }
 
-static int closeargs(arg_t *arg) {
+static int closeargs(struct arg_t *arg) {
 	if (arg == NULL)
 		return -1;
 	else {

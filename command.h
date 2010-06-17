@@ -43,7 +43,7 @@ void cmd_echo(const char*);
  * This happens if all else fails, it simply forks and execs with
  * the command specified.
  */
-void cmd_exec(arg_t*);
+void cmd_exec(struct arg_t*);
 /**
  * Clears the screen and puts the cursor at the top left corner.
  * The implementation is most likely the clear screen and move cursor
