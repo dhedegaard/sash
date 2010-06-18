@@ -32,11 +32,21 @@ check_function_exists(closedir HAVE_CLOSEDIR)
 check_function_exists(freopen HAVE_FREOPEN)
 check_function_exists(fopen HAVE_FOPEN)
 check_function_exists(fclose HAVE_FCLOSE)
+# libraries
 add_library(queue STATIC queue.c)
 add_library(stack STATIC stack.c)
 add_library(utility STATIC utility.c)
-add_executable(sash main.c main.h command.c command.h parser.c parser.h
-	environ.c environ.h ls.c ls.h cd.c cd.h
-	prompt.c prompt.h exec.c exec.h)
-target_link_libraries(sash queue stack utility)
+add_library(command STATIC command.c)
+add_library(parser STATIC parser.c)
+add_library(environ STATIC environ.c)
+add_library(ls STATIC ls.c)
+add_library(cd STATIC cd.c)
+add_library(prompt STATIC prompt.c)
+add_library(exec STATIC exec.c)
+# executable
+add_executable(sash main.c)
+# linking
+target_link_libraries(parser utility queue)
+target_link_libraries(ls stack)
+target_link_libraries(sash queue stack utility command parser environ ls cd prompt exec)
 install (TARGETS sash DESTINATION bin)

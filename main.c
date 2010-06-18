@@ -18,7 +18,6 @@
 #include "parser.h"
 #include "environ.h"
 #include "prompt.h"
-#include "main.h"
 #include "command.h"
 
 /**
