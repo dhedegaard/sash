@@ -13,7 +13,7 @@
 #include "queue.h"
 
 struct queue_node_t {
-	struct queue_note_t *next;
+	struct queue_node_t *next;
 	char e[255];
 };
 
