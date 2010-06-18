@@ -11,6 +11,10 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
+/**
+ * Contains the internal queue structure, please use the functions
+ * in this header to modify and use the queue.
+ */
 struct queue_t;
 
 /**

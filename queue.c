@@ -10,21 +10,15 @@
 
 #include "queue.h"
 
-/**
- * Declaration for a struct, with an internal representation
- * of a node in a single-linked queue.
- */
-struct queue_node_t;
+struct queue_node_t {
+	struct queue_note_t *next;
+	char e[255];
+};
 
 struct queue_t {
 	int size;
 	struct queue_node_t *front;
 	struct queue_node_t *back;
-};
-
-struct queue_node_t {
-	struct queue_note_t *next;
-	char e[255];
 };
 
 struct queue_t* queue_open() {
@@ -59,8 +53,10 @@ int queue_enqueue(struct queue_t *q, const char *str) {
 	if (q->back)
 		q->back->next = n;
 	q->back = n;
-	if (!q->front)
+	if (!q->front && !q->back) {
 		q->front = n;
+		q->back = n;
+	}
 	q->size++;
 	return 1;
 }
