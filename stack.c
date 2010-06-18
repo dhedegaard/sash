@@ -20,20 +20,23 @@ struct stack_node_t {
 	char element[255];
 };
 
-struct _stack_t* openstack() {
+struct _stack_t* stack_open() {
 	struct _stack_t *stack = malloc(sizeof(*stack));
 	stack->size = 0;
 	stack->top = NULL;
 	return stack;
 }
 
-void closestack(struct _stack_t *stack) {
-	while (stack->size > 0)
-		pop(stack);
+void stack_close(struct _stack_t *stack) {
+	while (stack->top != NULL) {
+		struct stack_node_t *n = stack->top;
+		stack->top = stack->top->next;
+		free(n);
+	}
 	free(stack);
 }
 
-char* pop(struct _stack_t *stack) {
+char* stack_pop(struct _stack_t *stack) {
 	char* _e;
 	struct stack_node_t *oldnode;
 	int len = -1;
@@ -50,7 +53,7 @@ char* pop(struct _stack_t *stack) {
 	return _e;
 }
 
-int push(struct _stack_t *stack, const char *element) {
+int stack_push(struct _stack_t *stack, const char *element) {
 	struct stack_node_t *newnode;
 	int size = strlen(element) + 1;
 	if (stack == NULL)

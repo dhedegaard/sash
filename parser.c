@@ -19,7 +19,7 @@
  * this struct should be made into an argt_t struct.
  */
 struct parser_t {
-	struct queue_t* queue;
+	/* struct queue_t* queue; */
 	/**
 	 * Is there an ampersand ?
 	 */
@@ -46,13 +46,13 @@ struct parser_t {
  * Remeber to free the parser_t after use, since it's allocated
  * on the heap.
  */
-static struct parser_t* parser_t_create();
+/* static struct parser_t* parser_t_create(); */
 
 /**
  * Frees a parser_t, including a queue, if there's any, as well
  * as inPipeFile and outPipeFile.
  */
-static int parser_t_destroy(struct parser_t*);
+/* static int parser_t_destroy(struct parser_t*); */
 
 /**
  * Parses a cmd to args,
@@ -306,14 +306,14 @@ static char *parsepipefromcmd(const char *cmd, char pipechar) {
 	return pipe;
 }
 
-static struct parser_t* parser_t_create() {
+/*static struct parser_t* parser_t_create() {
 	struct parser_t* p = malloc(sizeof(*p));
-	/* null pointers. */
-	p->inPipeFile = NULL;
+	/ * null pointers. */
+/*	p->inPipeFile = NULL;
 	p->outPipeFile = NULL;
 	p->queue = queue_open();
-	/* integer initialization */
-	p->background = 0;
+	/ * integer initialization */
+/*	p->background = 0;
 	p->inPipe = 0;
 	p->outPipe = 0;
 	return p;
@@ -329,4 +329,4 @@ static int parser_t_destroy(struct parser_t* p) {
 	if (p->queue)
 		queue_close(p->queue);
 	return 1;
-}
+}*/

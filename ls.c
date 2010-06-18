@@ -31,18 +31,18 @@ void ls_ls(const char *_dir) {
 	struct dirent *dir;
 	int maxlen;
 	if ((d = opendir(_dir == NULL ? "." : _dir)) != 0) {
-		struct _stack_t *stack = openstack();
+		struct _stack_t *stack = stack_open();
 		char **arr, **parr;
 		/* push all the directory names onto a stack. */
 		{
 			int olderr = errno;
 			while ((dir = readdir(d)) != NULL)
-				push(stack, dir->d_name);
+				stack_push(stack, dir->d_name);
 			if (errno != olderr) {
 				handle_readdir_err();
 				closedir(d);
 				if (stack != NULL)
-					closestack(stack);
+					stack_close(stack);
 				return;
 			}
 		}
@@ -51,7 +51,7 @@ void ls_ls(const char *_dir) {
 		/* pop the stack onto a fixed size array. */
 		parr = arr;
 		while (stack_size(stack) > 0)
-			*parr++ = pop(stack);
+			*parr++ = stack_pop(stack);
 		/* make sure we null terminate. */
 		*parr = NULL;
 		/* sort and print the array */
@@ -66,7 +66,7 @@ void ls_ls(const char *_dir) {
 		}
 		/* cleanup after ourselves. */
 		closedir(d);
-		closestack(stack);
+		stack_close(stack);
 		free(arr);
 	} else
 		fprintf(stderr, "sash: %s: %s\n", _dir == NULL ? "." : _dir, strerror(

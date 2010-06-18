@@ -1,6 +1,8 @@
 /*
  * queue.c
  *
+ * A node-based single-linked queue implementation.
+ *
  *  Created on: 17/06/2010
  *      Author: Dennis Hedegaard
  */
@@ -53,9 +55,8 @@ int queue_enqueue(struct queue_t *q, const char *str) {
 	if (q->back)
 		q->back->next = n;
 	q->back = n;
-	if (!q->front && !q->back) {
+	if (!q->front) {
 		q->front = n;
-		q->back = n;
 	}
 	q->size++;
 	return 1;

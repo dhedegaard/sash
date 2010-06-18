@@ -23,27 +23,27 @@ struct _stack_t;
  * Initializes values in the stack. This is required to avoid
  * weird behavior.
  */
-struct _stack_t* openstack();
+struct _stack_t* stack_open();
 /**
  * Makes sure to release all memory allocated by the stack, before
  * you free the stack (or an auto variable goes out of scope).
  * After all relations from the stack to stack frames have been released,
  * the stack itself is freed.
  */
-void closestack(struct _stack_t*);
+void stack_close(struct _stack_t*);
 /**
  * Pops a specific stack, if the stack is null or the stack is
  * empty, null is returned.
  * Remember to free the output.
  */
-char* pop(struct _stack_t*);
+char* stack_pop(struct _stack_t*);
 /**
  * Pushes an object on top of the stack, if the stack is null,
  * 0 is returned, else 1 is returned.
  * The element is copied onto the struct, by using the char[1]
  * struct hack.
  */
-int push(struct _stack_t*, const char*);
+int stack_push(struct _stack_t*, const char*);
 /**
  * Returns the size of the stack, if the stack is empty, 0 is
  * returned.
