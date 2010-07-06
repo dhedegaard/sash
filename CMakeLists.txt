@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.4)
-project(sash)
+project(sash C)
 include_directories(.)
 if (UNIX)
 	add_definitions("-Wall -pedantic -g")
