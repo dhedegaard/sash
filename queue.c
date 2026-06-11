@@ -39,6 +39,7 @@ int queue_close(struct queue_t *q) {
 		q->front = n->next;
 		free(n);
 	}
+	free(q);
 	return 1;
 }
 
