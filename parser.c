@@ -290,13 +290,24 @@ static char *parsepipefromcmd(const char *cmd, char pipechar) {
 			cmd++;
 			while (isspace(*cmd) && *cmd != '\0')
 				cmd++;
-			if (*cmd == '\0')
+			if (*cmd == '\0') {
+				if (pipe) {
+					free(pipe);
+				}
 				return NULL;
+			}
 			while (!isspace(*(cmd + len)) && *(cmd + len) != '\0' && *(cmd
 					+ len) != '<' && *(cmd + len) != '>')
 				len++;
-			if (len == 0)
+			if (len == 0) {
+				if (pipe) {
+					free(pipe);
+				}
 				return NULL;
+			}
+			if (pipe) {
+				free(pipe);
+			}
 			pipe = malloc(len + 1);
 			memcpy(pipe, cmd, len + 1);
 			pipe[len] = '\0';
