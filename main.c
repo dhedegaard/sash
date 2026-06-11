@@ -32,6 +32,8 @@ static void siginthandler(int sig);
 
 int main(int argc, char **argv, char **env) {
 	char input[LINE_MAX];
+	(void) argc;
+	(void) argv;
 	printf("sash shell revision: %d\n", 2);
 	signal(SIGINT, siginthandler);
 	setshellpath();
