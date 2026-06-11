@@ -20,7 +20,7 @@ struct stack_node_t {
 	char element[255];
 };
 
-struct _stack_t* stack_open() {
+struct _stack_t* stack_open(void) {
 	struct _stack_t *stack = malloc(sizeof(*stack));
 	stack->size = 0;
 	stack->top = NULL;

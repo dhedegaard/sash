@@ -23,7 +23,7 @@ static char *getvaluebeforeequals(const char *string);
  * to a more fitting size pointer and frees heap heap from the
  * first pointer.
  */
-static void setstartworkdir();
+static void setstartworkdir(void);
 
 static int _envlen;
 static char **_env;
@@ -67,11 +67,11 @@ static char *getvaluebeforeequals(const char *string) {
 	return value;
 }
 
-const char *getstartwd() {
+const char *getstartwd(void) {
 	return _startwd;
 }
 
-static void setstartworkdir() {
+static void setstartworkdir(void) {
 	char tmp[PATH_MAX];
 	int len;
 	getcwd(tmp, PATH_MAX);
@@ -80,7 +80,7 @@ static void setstartworkdir() {
 	memcpy(_startwd, tmp, len + 1);
 }
 
-void environ_cleanup() {
+void environ_cleanup(void) {
 	if (_startwd)
 		free(_startwd);
 }

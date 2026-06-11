@@ -13,11 +13,11 @@
 /**
  * Prints some help, this might include possible commands.
  */
-void cmd_help();
+void cmd_help(void);
 /**
  * Quits the shell.
  */
-void cmd_quit();
+void cmd_quit(void);
 /**
  * Attempts to change directory, to the one specified. If
  * the directory does not exist, or is restricted access,
@@ -33,7 +33,7 @@ void cmd_ls(const char*);
 /**
  * Lists all the environmental variables available on the system.
  */
-void cmd_environ();
+void cmd_environ(void);
 /**
  * Does a simple echo of the text specified, if the text is NULL,
  * the function returns immediately.
@@ -49,5 +49,5 @@ void cmd_exec(struct arg_t*);
  * The implementation is most likely the clear screen and move cursor
  * to top left corner ANSI sequence.
  */
-void cmd_clear();
+void cmd_clear(void);
 #endif /* COMMAND_H_ */

@@ -8,6 +8,6 @@
 #ifndef PROMPT_H_
 #define PROMPT_H_
 
-void printprompt();
+void printprompt(void);
 
 #endif /* PROMPT_H_ */

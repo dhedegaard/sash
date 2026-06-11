@@ -23,7 +23,7 @@ struct queue_t {
 	struct queue_node_t *back;
 };
 
-struct queue_t* queue_open() {
+struct queue_t* queue_open(void) {
 	struct queue_t *q = malloc(sizeof(*q));
 	q->back = NULL;
 	q->front = NULL;

@@ -27,10 +27,10 @@ void getenviron(FILE*, int(*)(FILE*, const char*, ...));
  * Used for the "help" command, in order to find the readme after using
  * chdir.
  */
-const char *getstartwd();
+const char *getstartwd(void);
 /**
  * Make sure to run this, for some heap cleanups.
  */
-void environ_cleanup();
+void environ_cleanup(void);
 
 #endif /* ENVIRON_H_ */

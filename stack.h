@@ -23,7 +23,7 @@ struct _stack_t;
  * Initializes values in the stack. This is required to avoid
  * weird behavior.
  */
-struct _stack_t* stack_open();
+struct _stack_t* stack_open(void);
 /**
  * Makes sure to release all memory allocated by the stack, before
  * you free the stack (or an auto variable goes out of scope).

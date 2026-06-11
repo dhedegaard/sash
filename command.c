@@ -16,7 +16,7 @@
 #include "cd.h"
 #include "exec.h"
 
-void cmd_help() {
+void cmd_help(void) {
 	char *helpfile = malloc(PATH_MAX);
 	FILE *f;
 	if (snprintf(helpfile, PATH_MAX, "%s/readme", getstartwd()) < 0) {
@@ -40,7 +40,7 @@ void cmd_help() {
 		free(helpfile);
 }
 
-void cmd_quit() {
+void cmd_quit(void) {
 	printf("Qutting..\n");
 	environ_cleanup();
 	exit(0);
@@ -56,7 +56,7 @@ void cmd_ls(const char *dir) {
 	free(path);
 }
 
-void cmd_environ() {
+void cmd_environ(void) {
 	getenviron(stdout, fprintf);
 }
 
@@ -72,6 +72,6 @@ void cmd_exec(struct arg_t *args) {
 	exec(args);
 }
 
-void cmd_clear() {
+void cmd_clear(void) {
 	printf("\033[2J\033[H");
 }

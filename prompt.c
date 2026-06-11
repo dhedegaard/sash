@@ -21,7 +21,7 @@
  */
 static int startswithhomedir(const char *dir);
 
-void printprompt() {
+void printprompt(void) {
 	char cmd[PATH_MAX];
 	char *pcmd = cmd;
 	int cmdlen;

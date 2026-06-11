@@ -24,11 +24,11 @@
  * Attemps to set the SHELL environmental variable, using
  * getcwd() and setenv().
  */
-static void setshellpath();
+static void setshellpath(void);
 /**
  * Handler for SIGINT's.
  */
-static void siginthandler();
+static void siginthandler(int sig);
 
 int main(int argc, char **argv, char **env) {
 	char input[LINE_MAX];
@@ -48,14 +48,15 @@ int main(int argc, char **argv, char **env) {
 	return 0;
 }
 
-static void siginthandler() {
+static void siginthandler(int sig) {
+	(void) sig;
 	fflush(stdin);
 	printf("\n");
 	printprompt();
 	fflush(stdout);
 }
 
-static void setshellpath() {
+static void setshellpath(void) {
 	char *pid = NULL, *newshell = NULL;
 	pid = malloc(sizeof(*pid) * (PATH_MAX + 1));
 	if (snprintf(pid, PATH_MAX, "/proc/%d/exe", getpid()) <= 0) {

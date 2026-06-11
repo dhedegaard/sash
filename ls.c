@@ -24,7 +24,7 @@ static int compare_chars(const void *a, const void *b);
  * Call if readdir() fails and errno is different from before
  * the call, then something bad happened.
  */
-static void handle_readdir_err();
+static void handle_readdir_err(void);
 
 void ls_ls(const char *_dir) {
 	DIR *d;
@@ -78,7 +78,7 @@ static int compare_chars(const void *a, const void *b) {
 	return strcmp(*ia, *ib);
 }
 
-static void handle_readdir_err() {
+static void handle_readdir_err(void) {
 	fprintf(stderr, "%s\n", strerror(errno));
 	/*switch (errno) {
 	 case EOVERFLOW:

@@ -20,7 +20,7 @@ struct queue_t;
 /**
  * Opens a new queue, returns a pointer to an empty queue.
  */
-struct queue_t* queue_open();
+struct queue_t* queue_open(void);
 /**
  * Attempts to close a queue, if successful, 1 is returned. Else 0.
  */
