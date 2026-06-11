@@ -252,7 +252,7 @@ static char** parsetoargs(const char *cmd) {
 	while (isspace(*(cmd + len - 1)) && *(cmd + len - 2) != '\\')
 		len--;
 	if (len == 0) {
-		args = malloc(sizeof(*args));
+		args = malloc(sizeof(*args) * 2);
 		*args = malloc(2);
 		**args = '\0';
 		*(args + 1) = NULL;
